@@ -54,7 +54,7 @@ public class BuzMo
 
         // TODO: check if user is in database;
 
-        if (userType.equalsIgnoreCase("c"))
+        if (userType.equalsIgnoreCase("u"))
             return new User(username);
         else if(userType.equalsIgnoreCase("m"))
             return new Manager(username);
