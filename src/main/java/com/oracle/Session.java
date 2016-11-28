@@ -1,6 +1,5 @@
 package com.oracle;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -33,7 +32,7 @@ public class Session {
             else if (input.equalsIgnoreCase("l"))
                 logout = true;
             else
-                selectManagerAction();
+                System.out.println("Invalid action");
         }
     }
 
@@ -49,14 +48,14 @@ public class Session {
             else if (input.equalsIgnoreCase("l"))
                 logout = true;
             else
-                selectManagerAction();
+                System.out.println("Invalid action");
         }
     }
 
     private void selectExistingChatgroup() {
         Scanner scanner = new Scanner(System.in);
 
-        HashMap<String, ChatGroup> currentChatgroups = queryCurrentChatgroups();
+        HashMap<String, ChatGroup> currentChatgroups = currentUser.queryChatGroups();
 
         for(Map.Entry<String, ChatGroup> chatgroup : currentChatgroups.entrySet())
             System.out.println(chatgroup.getKey() + " : " + chatgroup.getValue().getName());
@@ -71,23 +70,38 @@ public class Session {
             return;
         }
 
+        inChatGroupOptions(selectedChatgroup);
+
+    }
+
+    private void inChatGroupOptions(ChatGroup selectedChatgroup) {
+
+        // prints out most recent messages in chatgroup
         Date queryDateParam = new Date();
         ArrayList<Message> messages = selectedChatgroup.queryMessages(queryDateParam, true);
-
         for (Message message : messages)
             System.out.println(message.toString());
 
+
+        Scanner scanner = new Scanner(System.in);
         boolean done = false;
         while(!done) {
             System.out.println(Constants.userChatGroupMessageOptions);
             if(currentUser.getUserId().equals(selectedChatgroup.getOwnerId()))
                 System.out.println(Constants.ownerChatGroupOptions);
 
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             String option = scanner.nextLine();
+            // post a new message to the chatgroup
             if(option.equals("1")) {
                 Message newMessage = createNewMessage();
                 selectedChatgroup.postMessage(newMessage);
             }
+            // add a friend to the chat group
             else if(option.equals("2")) {
                 HashMap<String, User> friendsList = currentUser.queryFriends();
                 for (Map.Entry<String, User> friend : friendsList.entrySet())
@@ -95,8 +109,9 @@ public class Session {
                 System.out.print("Enter user ID: ");
                 String userID = scanner.nextLine();
                 User friendToAdd = friendsList.get(userID);
-                addFriendToChatGroup(friendToAdd, selectedChatgroup);
+                selectedChatgroup.addFriendToChatGroup(friendToAdd);
             }
+            // scroll up (get next set of older messages)
             else if(option.equals("3")) {
                 queryDateParam = messages.get(0).getDatePosted();
                 messages = selectedChatgroup.queryMessages(queryDateParam, true);
@@ -104,6 +119,7 @@ public class Session {
                 for (Message message : messages)
                     System.out.println(message.toString());
             }
+            // scroll down (get next set of newer messages)
             else if(option.equals("4")) {
                 queryDateParam = messages.get(messages.size() - 1).getDatePosted();
                 messages = selectedChatgroup.queryMessages(queryDateParam, false);
@@ -111,19 +127,26 @@ public class Session {
                 for (Message message : messages)
                     System.out.println(message.toString());
             }
+            // back to main menu
             else if(option.equals("5"))
                 done = true;
+            // update chatgroup message duration
+            else if(option.equals("6") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {
+                System.out.print("Enter new ChatGroup message duration(seconds): ");
+                String newDuration = scanner.nextLine();
+                selectedChatgroup.updateDuration(newDuration);
+            }
+            // update chatgroup name
+            else if(option.equals("7") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {
+                System.out.print("Enter new ChatGroup name: ");
+                String newName = scanner.nextLine();
+                selectedChatgroup.updateName(newName);
+            }
             else
                 System.out.println("INVALID OPTION\n");
 
-            // TODO: implement chatgroup owner options.
 
         }
-
-    }
-
-    private void addFriendToChatGroup(User friendToAdd, ChatGroup chatGroup) {
-        // TODO: invite friend to chatgroup.
     }
 
     private Message createNewMessage() {
@@ -131,17 +154,6 @@ public class Session {
         System.out.println("Enter Messsage:");
         String message = scanner.nextLine();
         return new Message(currentUser.getUserId(), message);
-    }
-
-
-    private HashMap<String, ChatGroup> queryCurrentChatgroups() {
-        HashMap<String, ChatGroup> chatGroups = new HashMap<String, ChatGroup>();
-
-        // test data
-        chatGroups.put("chatgroupid", new ChatGroup("chatgroupownerid", "chatgroupid", "chatgroup name"));
-
-        // TODO: select ChatGroups the current user is in. return hashmap of <chatgroupID, ChatGroup object>
-        return chatGroups;
     }
 
     private void createUserAction(){
@@ -170,7 +182,13 @@ public class Session {
     }
 
     private void addUser(String username, String password) throws SQLException {
-        // TODO: add user into database
+
+        if(currentUser instanceof Manager) {
+            Manager manager = (Manager)currentUser;
+            manager.addUser(username, password);
+        }
+        else
+            System.out.println("User has invalid privileges to create another user.");
     }
 
     private boolean validateUser(String username, String password, String secondPass) {

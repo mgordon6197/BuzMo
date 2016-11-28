@@ -55,6 +55,21 @@ public class ChatGroup implements MessageQueryable{
 
     public void postMessage(Message newMessage) {
 
-        // TODO: store the message in the database;
+        // TODO: store the message in the database.
+    }
+
+    public void updateDuration(String newDuration) {
+
+        // TODO: update chatgroup row with newDuration.
+    }
+
+    public void updateName(String newName) {
+
+        // TODO: update chatgroup row with newName.
+    }
+
+    public void addFriendToChatGroup(User friendToAdd) {
+
+        // TODO: invite friend to chatgroup.
     }
 }

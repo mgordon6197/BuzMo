@@ -52,11 +52,11 @@ public class BuzMo
         java.lang.System.out.print("Enter Password: ");
         String password = scanner.nextLine();
 
-        // TODO: check if user is in database;
+        // TODO: check if user is in database. also add necessary data to User or Manager objects.
 
         if (userType.equalsIgnoreCase("u"))
             return new User(username);
-        else if(userType.equalsIgnoreCase("m"))
+        else if (userType.equalsIgnoreCase("m"))
             return new Manager(username);
         else {
             System.out.println("Incorrect user type\n");

@@ -39,4 +39,15 @@ public class User {
 
         return friends;
     }
+
+    public HashMap<String, ChatGroup> queryChatGroups() {
+        HashMap<String, ChatGroup> chatGroups = new HashMap<String, ChatGroup>();
+
+        // test data
+        chatGroups.put("chatgroupid", new ChatGroup("chatgroupownerid", "chatgroupid", "chatgroup name"));
+
+        // TODO: select ChatGroups the current user is in. return hashmap of <chatgroupID, ChatGroup object>
+
+        return chatGroups;
+    }
 }

@@ -7,4 +7,9 @@ public class Manager extends User {
     public Manager(String userId) {
         super(userId);
     }
+
+    public void addUser(String username, String password) {
+
+        // TODO: add user to database
+    }
 }
