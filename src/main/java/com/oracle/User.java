@@ -1,8 +1,6 @@
 package com.oracle;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  *
@@ -64,7 +62,38 @@ public class User implements MessageQueryable{
         return circleMessages;
     }
 
+    public void postMessage(Message message) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        HashMap<String, User> postToUsersCicle = new HashMap<String, User>();
+        System.out.println("Make message public?(y/n)");
+        String input = scanner.nextLine();
+        boolean isPublic = false;
+        if(input.equalsIgnoreCase("y")) {
+            isPublic = true;
+            postToUsersCicle = queryFriends();
+        }
+        else {
+            HashMap<String, User> allFriends = queryFriends();
+            for(Map.Entry<String, User> user : allFriends.entrySet())
+                System.out.println(user.getKey() + " : " + user.getValue().getName());
+
+            System.out.println("select friends to post in their circle. Delimit by a comma.");
+            String usersString = scanner.nextLine();
+            String [] userIds = usersString.replaceAll("\\s+","").split(",");
+
+            for( String userId : userIds)
+                postToUsersCicle.put(userId, new User(userId));
+        }
+
+        postMessage(message, postToUsersCicle, isPublic);
+    }
+
+
     public void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
+
+
 
         System.out.println("In Post to Circle");
 

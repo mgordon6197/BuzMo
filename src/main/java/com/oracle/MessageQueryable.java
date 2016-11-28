@@ -8,4 +8,6 @@ import java.util.Date;
  */
 public interface MessageQueryable {
     ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan);
+
+    void postMessage(Message message);
 }

@@ -47,11 +47,34 @@ public class Session {
                 selectExistingChatgroup();
             if(input.equalsIgnoreCase("c"))
                 viewCircleAction();
+            if(input.equalsIgnoreCase("p"))
+                privateMessageAction();
             else if(input.equalsIgnoreCase("l"))
                 logout = true;
             else
                 System.out.println("Invalid action");
         }
+    }
+
+    private void privateMessageAction() {
+        Scanner scanner = new Scanner(System.in);
+
+        HashMap<String, User> friends = currentUser.queryFriends();
+        for(Map.Entry<String, User> friend : friends.entrySet())
+            System.out.println(friend.getKey() + " : " + friend.getValue().getName());
+
+        System.out.print("Select User by ID: ");
+        String userId = scanner.nextLine();
+
+        PrivateConversation privateConversation = new PrivateConversation(userId, currentUser.getUserId());
+
+        Date dateQueryParam = new Date();
+        ArrayList<Message> privateMessages = privateConversation.queryMessages(dateQueryParam, false);
+
+        for(Message privateMessage : privateMessages)
+            System.out.println(privateMessage.toString());
+
+        inViewCircleAndPrivateOptions(privateMessages, Constants.insideViewCircleMenu, privateConversation);
     }
 
     private void viewCircleAction() {
@@ -81,26 +104,28 @@ public class Session {
         for(Message circleMessage : circleMessages)
             System.out.println(circleMessage.toString());
 
-        inViewCircleOptions(circleMessages);
+        inViewCircleAndPrivateOptions(circleMessages, Constants.insidePrivateConversationMenu, currentUser);
 
     }
 
-    private void inViewCircleOptions(ArrayList<Message> circleMessages) {
+    private void inViewCircleAndPrivateOptions(ArrayList<Message> firstMessages, String menu, MessageQueryable messageQueryable) {
         Scanner scanner = new Scanner(System.in);
 
         boolean done = false;
         while(!done) {
-            System.out.println(Constants.insideViewCircleMenu);
+            System.out.println(menu);
             String option = scanner.nextLine();
-            if (option.equals("1"))
-                postMessageToCircle();
+            if (option.equals("1")) {
+                Message message = createNewMessage();
+                messageQueryable.postMessage(message);
+            }
             else if (option.equals("2")) {
-                ArrayList<Message> messages = scrollUp(circleMessages, currentUser);
+                ArrayList<Message> messages = scrollUp(firstMessages, messageQueryable);
                 for(Message message : messages)
                     System.out.println(message.toString());
             }
             else if (option.equals("3")) {
-                ArrayList<Message> messages = scrollDown(circleMessages, currentUser);
+                ArrayList<Message> messages = scrollDown(firstMessages, messageQueryable);
                 for(Message message : messages)
                     System.out.println(message.toString());
             }
@@ -112,34 +137,34 @@ public class Session {
 
     }
 
-    private void postMessageToCircle() {
-        Message message = createNewMessage();
-
-        Scanner scanner = new Scanner(System.in);
-
-        HashMap<String, User> postToUsersCicle = new HashMap<String, User>();
-        System.out.println("Make message public?(y/n)");
-        String input = scanner.nextLine();
-        boolean isPublic = false;
-        if(input.equalsIgnoreCase("y")) {
-            isPublic = true;
-            postToUsersCicle = currentUser.queryFriends();
-        }
-        else {
-            HashMap<String, User> allFriends = currentUser.queryFriends();
-            for(Map.Entry<String, User> user : allFriends.entrySet())
-                System.out.println(user.getKey() + " : " + user.getValue().getName());
-
-            System.out.println("select friends to post in their circle. Delimit by a comma.");
-            String usersString = scanner.nextLine();
-            String [] userIds = usersString.replaceAll("\\s+","").split(",");
-
-            for( String userId : userIds)
-                postToUsersCicle.put(userId, new User(userId));
-        }
-
-        currentUser.postMessage(message, postToUsersCicle, isPublic);
-    }
+//    private void postMessageToCircle() {
+//        Message message = createNewMessage();
+//
+//        Scanner scanner = new Scanner(System.in);
+//
+//        HashMap<String, User> postToUsersCicle = new HashMap<String, User>();
+//        System.out.println("Make message public?(y/n)");
+//        String input = scanner.nextLine();
+//        boolean isPublic = false;
+//        if(input.equalsIgnoreCase("y")) {
+//            isPublic = true;
+//            postToUsersCicle = currentUser.queryFriends();
+//        }
+//        else {
+//            HashMap<String, User> allFriends = currentUser.queryFriends();
+//            for(Map.Entry<String, User> user : allFriends.entrySet())
+//                System.out.println(user.getKey() + " : " + user.getValue().getName());
+//
+//            System.out.println("select friends to post in their circle. Delimit by a comma.");
+//            String usersString = scanner.nextLine();
+//            String [] userIds = usersString.replaceAll("\\s+","").split(",");
+//
+//            for( String userId : userIds)
+//                postToUsersCicle.put(userId, new User(userId));
+//        }
+//
+//        currentUser.postMessage(message, postToUsersCicle, isPublic);
+//    }
 
     private void selectExistingChatgroup() {
         Scanner scanner = new Scanner(System.in);

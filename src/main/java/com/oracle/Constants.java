@@ -51,4 +51,15 @@ public class Constants {
                     "\tScroll down (newer)\n" +
                     "4:\n" +
                     "\tBack to main menu";
+
+    public static String insidePrivateConversationMenu =
+            "Select from the following options:\n" +
+                    "1:\n" +
+                    "\tPost a message\n" +
+                    "2:\n" +
+                    "\tScroll up (older)\n" +
+                    "3:\n" +
+                    "\tScroll down (newer)\n" +
+                    "4:\n" +
+                    "\tBack to main menu";
 }
