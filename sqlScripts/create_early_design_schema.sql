@@ -1,8 +1,9 @@
 CREATE TABLE Users (
 uname CHAR(20),
-phone CHAR(10),
 email CHAR(20),
 password CHAR(20),
+phone CHAR(10),
+screenname CHAR(20) DEFAULT NULL,
 PRIMARY KEY (email)
 );
 
@@ -14,14 +15,14 @@ FOREIGN KEY (userid) REFERENCES Users(email)
 
 
 CREATE TABLE Topic (
-topic CHAR(10),
+topic CHAR(20),
 PRIMARY KEY(topic)
 );
 
 CREATE TABLE Messages (
 mid INTEGER UNIQUE,
 data CHAR(1400),
-timestamp DATE,
+tstamp timestamp,
 sender CHAR(20),
 PRIMARY KEY (mid,sender),
 FOREIGN KEY (sender) REFERENCES Users(email)
@@ -38,7 +39,7 @@ FOREIGN KEY (user2id) REFERENCES Users(email) ON DELETE CASCADE
 
 
 CREATE TABLE Topic_Message (
-topic CHAR(10),
+topic CHAR(20),
 messageid INTEGER,
 PRIMARY KEY (topic,messageid),
 FOREIGN KEY (messageid) REFERENCES Messages(mid) ON DELETE CASCADE,
@@ -46,7 +47,7 @@ FOREIGN KEY (topic) REFERENCES Topic(topic) ON DELETE CASCADE
 );
 
 CREATE TABLE Topic_User (
-topic CHAR(10),
+topic CHAR(20),
 userid CHAR(20),
 PRIMARY KEY (topic,userid),
 FOREIGN KEY (userid) REFERENCES Users(email) ON DELETE CASCADE,
@@ -90,7 +91,7 @@ FOREIGN KEY (userid) REFERENCES Users(email) ON DELETE CASCADE
 CREATE TABLE Group_Messages (
 group_name CHAR(20),
 messageid INTEGER,
-since DATE,
+since timestamp,
 PRIMARY KEY (group_name,messageid),
 FOREIGN KEY (group_name) REFERENCES Group_Owner(gname) ON DELETE CASCADE,
 FOREIGN KEY (messageid) REFERENCES Messages(mid) ON DELETE CASCADE
