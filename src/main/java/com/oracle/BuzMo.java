@@ -27,6 +27,7 @@ public class BuzMo
                 loggedUser = userLogin(connection);
                 if(loggedUser == null)
                     continue;
+                loggedUser.con = connection;
                 login = true;
             } catch (SQLException e) {
                 System.out.println(e.toString());

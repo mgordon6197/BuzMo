@@ -1,6 +1,11 @@
 package com.oracle;
 
 import java.util.*;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 
 /**
  *
@@ -8,6 +13,7 @@ import java.util.*;
 public class User implements MessageQueryable{
     private String userId;
     private String name;
+    public static Connection con;
 
     public User(String userId) {
         this.userId = userId;
@@ -32,9 +38,6 @@ public class User implements MessageQueryable{
     public HashMap<String, User> queryFriends() {
         HashMap<String, User> friends = new HashMap<String, User>();
 
-        //test data
-        friends.put("friendid", new User("friendid"));
-
         // TODO: query all the current users friends and create a HashMap with <UserID, UserObject>
 
         return friends;
@@ -42,12 +45,22 @@ public class User implements MessageQueryable{
 
     public HashMap<String, ChatGroup> queryChatGroups() {
         HashMap<String, ChatGroup> chatGroups = new HashMap<String, ChatGroup>();
-
-        // test data
-        chatGroups.put("chatgroupid", new ChatGroup("chatgroupownerid", "chatgroupid", "chatgroup name"));
-
-        // TODO: select ChatGroups the current user is in. return hashmap of <chatgroupID, ChatGroup object>
-
+        String query = "select M.gname,G.userid from Member_Of M,Group_Owner G " +
+                       "where M.userid = '" + userId + "' and G.gname = M.gname";
+        System.out.println(query);
+        Statement statement = null;
+        try {
+            statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                String owner = result.getString("userid");
+                String group = result.getString("gname");
+                chatGroups.put(group,new ChatGroup(owner,group,group));
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         return chatGroups;
     }
 
