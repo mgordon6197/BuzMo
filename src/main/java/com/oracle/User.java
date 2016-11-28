@@ -1,12 +1,13 @@
 package com.oracle;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
  *
  */
-public class User {
+public class User implements MessageQueryable{
     private String userId;
     private String name;
 
@@ -52,11 +53,22 @@ public class User {
         return chatGroups;
     }
 
-    public ArrayList<Message> queryCircle() {
-        ArrayList<Message> circleMessages = null;
+    public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
+        ArrayList<Message> circleMessages = new ArrayList<Message>();
+
+        // Test Data
+        circleMessages.add(new Message(userId, "Circle Message"));
 
         // TODO: query this users circle. Sort by oldest first.
 
         return circleMessages;
+    }
+
+    public void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
+
+        System.out.println("In Post to Circle");
+
+        // TODO: post message to my circle and other users circle.
+
     }
 }

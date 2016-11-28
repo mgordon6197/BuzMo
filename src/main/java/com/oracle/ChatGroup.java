@@ -53,7 +53,7 @@ public class ChatGroup implements MessageQueryable{
         return messages;
     }
 
-    public void postMessage(Message newMessage) {
+    public void postMessage(Message message) {
 
         // TODO: store the message in the database.
     }

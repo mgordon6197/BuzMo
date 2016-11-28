@@ -23,7 +23,7 @@ public class Constants {
                     "\tLogout";
 
     public static final String userChatGroupMessageOptions =
-            "Select From the following options:\n" +
+            "Select from the following options:\n" +
                     "1:\n" +
                     "\tPost a new message\n" +
                     "2:\n" +
@@ -40,4 +40,15 @@ public class Constants {
             "\tChange ChatGroup duration\n" +
             "7:\n" +
             "\tChange ChatGroup name\n";
+
+    public static final String insideViewCircleMenu =
+            "Select from the following options:\n" +
+                    "1:\n" +
+                    "\tPost a message\n" +
+                    "2:\n" +
+                    "\tScroll up (older)\n" +
+                    "3:\n" +
+                    "\tScroll down (newer)\n" +
+                    "4:\n" +
+                    "\tBack to main menu";
 }

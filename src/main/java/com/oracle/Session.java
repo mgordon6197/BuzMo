@@ -25,7 +25,7 @@ public class Session {
 
         boolean logout = false;
         while(!logout) {
-            java.lang.System.out.println(Constants.ManagerActionMenu);
+            System.out.println(Constants.ManagerActionMenu);
             String input = scanner.nextLine();
             if (input.equalsIgnoreCase("c"))
                 createUserAction();
@@ -41,7 +41,7 @@ public class Session {
 
         boolean logout = false;
         while(!logout) {
-            java.lang.System.out.println(Constants.UserActionMenu);
+            System.out.println(Constants.UserActionMenu);
             String input = scanner.nextLine();
             if(input.equalsIgnoreCase("g"))
                 selectExistingChatgroup();
@@ -67,10 +67,10 @@ public class Session {
 
         ArrayList<Message> circleMessages;
         if(userId.equals(currentUser.getUserId()))
-            circleMessages = currentUser.queryCircle();
+            circleMessages = currentUser.queryMessages(new Date(), false);
         else {
             User circleUser = new User(userId);
-            circleMessages = circleUser.queryCircle();
+            circleMessages = circleUser.queryMessages(new Date(), false);
         }
 
         if(circleMessages == null) {
@@ -81,6 +81,64 @@ public class Session {
         for(Message circleMessage : circleMessages)
             System.out.println(circleMessage.toString());
 
+        inViewCircleOptions(circleMessages);
+
+    }
+
+    private void inViewCircleOptions(ArrayList<Message> circleMessages) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean done = false;
+        while(!done) {
+            System.out.println(Constants.insideViewCircleMenu);
+            String option = scanner.nextLine();
+            if (option.equals("1"))
+                postMessageToCircle();
+            else if (option.equals("2")) {
+                ArrayList<Message> messages = scrollUp(circleMessages, currentUser);
+                for(Message message : messages)
+                    System.out.println(message.toString());
+            }
+            else if (option.equals("3")) {
+                ArrayList<Message> messages = scrollDown(circleMessages, currentUser);
+                for(Message message : messages)
+                    System.out.println(message.toString());
+            }
+            else if (option.equals("4"))
+                done = true;
+            else
+                System.out.println("Invalid Option");
+        }
+
+    }
+
+    private void postMessageToCircle() {
+        Message message = createNewMessage();
+
+        Scanner scanner = new Scanner(System.in);
+
+        HashMap<String, User> postToUsersCicle = new HashMap<String, User>();
+        System.out.println("Make message public?(y/n)");
+        String input = scanner.nextLine();
+        boolean isPublic = false;
+        if(input.equalsIgnoreCase("y")) {
+            isPublic = true;
+            postToUsersCicle = currentUser.queryFriends();
+        }
+        else {
+            HashMap<String, User> allFriends = currentUser.queryFriends();
+            for(Map.Entry<String, User> user : allFriends.entrySet())
+                System.out.println(user.getKey() + " : " + user.getValue().getName());
+
+            System.out.println("select friends to post in their circle. Delimit by a comma.");
+            String usersString = scanner.nextLine();
+            String [] userIds = usersString.replaceAll("\\s+","").split(",");
+
+            for( String userId : userIds)
+                postToUsersCicle.put(userId, new User(userId));
+        }
+
+        currentUser.postMessage(message, postToUsersCicle, isPublic);
     }
 
     private void selectExistingChatgroup() {
@@ -146,17 +204,13 @@ public class Session {
             }
             // scroll up (get next set of older messages)
             else if(option.equals("3")) {
-                queryDateParam = messages.get(0).getDatePosted();
-                messages = selectedChatgroup.queryMessages(queryDateParam, true);
-
+                messages = scrollUp(messages, selectedChatgroup);
                 for (Message message : messages)
                     System.out.println(message.toString());
             }
             // scroll down (get next set of newer messages)
             else if(option.equals("4")) {
-                queryDateParam = messages.get(messages.size() - 1).getDatePosted();
-                messages = selectedChatgroup.queryMessages(queryDateParam, false);
-
+                messages = scrollDown(messages, selectedChatgroup);
                 for (Message message : messages)
                     System.out.println(message.toString());
             }
@@ -180,6 +234,16 @@ public class Session {
 
 
         }
+    }
+
+    private ArrayList<Message> scrollDown(ArrayList<Message> messages, MessageQueryable messageQueryable) {
+        Date queryDateParam = messages.get(messages.size() - 1).getDatePosted();
+        return messageQueryable.queryMessages(queryDateParam, false);
+    }
+
+    private ArrayList<Message> scrollUp(AbstractList<Message> messages, MessageQueryable messageQueryable) {
+       Date queryDateParam = messages.get(0).getDatePosted();
+        return messageQueryable.queryMessages(queryDateParam, true);
     }
 
     private Message createNewMessage() {
