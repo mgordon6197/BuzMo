@@ -15,6 +15,10 @@ public class Constants {
             "Select from the following actions:\n" +
                     "g:\n" +
                     "\tSelect Existing ChatGroup\n" +
+                    "c:\n" +
+                    "\tView Circle\n" +
+                    "p:\n" +
+                    "\tView/Create Private Message\n" +
                     "l:\n" +
                     "\tLogout";
 

@@ -1,5 +1,6 @@
 package com.oracle;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -49,5 +50,13 @@ public class User {
         // TODO: select ChatGroups the current user is in. return hashmap of <chatgroupID, ChatGroup object>
 
         return chatGroups;
+    }
+
+    public ArrayList<Message> queryCircle() {
+        ArrayList<Message> circleMessages = null;
+
+        // TODO: query this users circle. Sort by oldest first.
+
+        return circleMessages;
     }
 }

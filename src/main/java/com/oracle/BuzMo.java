@@ -44,7 +44,7 @@ public class BuzMo
     private static User userLogin(Connection connection) throws SQLException {
         Scanner scanner = new Scanner(java.lang.System.in);
 
-        System.out.println("Log in as Manager(M) or User(U): ");
+        System.out.print("Log in as Manager(M) or User(U): ");
         String userType = scanner.nextLine();
 
         java.lang.System.out.print("Enter Username: ");

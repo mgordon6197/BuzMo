@@ -43,13 +43,44 @@ public class Session {
         while(!logout) {
             java.lang.System.out.println(Constants.UserActionMenu);
             String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("g"))
+            if(input.equalsIgnoreCase("g"))
                 selectExistingChatgroup();
-            else if (input.equalsIgnoreCase("l"))
+            if(input.equalsIgnoreCase("c"))
+                viewCircleAction();
+            else if(input.equalsIgnoreCase("l"))
                 logout = true;
             else
                 System.out.println("Invalid action");
         }
+    }
+
+    private void viewCircleAction() {
+        Scanner scanner = new Scanner(System.in);
+
+        HashMap<String, User> friendsList = currentUser.queryFriends();
+        System.out.println(currentUser.getUserId() + " : My Circle" );
+        for (Map.Entry<String, User> friend : friendsList.entrySet())
+            System.out.println(friend.getKey() + " : " + friend.getValue().getName());
+
+        System.out.println("\nSelect User ID: ");
+        String userId = scanner.nextLine();
+
+        ArrayList<Message> circleMessages;
+        if(userId.equals(currentUser.getUserId()))
+            circleMessages = currentUser.queryCircle();
+        else {
+            User circleUser = new User(userId);
+            circleMessages = circleUser.queryCircle();
+        }
+
+        if(circleMessages == null) {
+            System.out.println("Invalid User ID");
+            return;
+        }
+
+        for(Message circleMessage : circleMessages)
+            System.out.println(circleMessage.toString());
+
     }
 
     private void selectExistingChatgroup() {
@@ -106,9 +137,11 @@ public class Session {
                 HashMap<String, User> friendsList = currentUser.queryFriends();
                 for (Map.Entry<String, User> friend : friendsList.entrySet())
                     System.out.println(friend.getKey() + " : " + friend.getValue().getName());
+
                 System.out.print("Enter user ID: ");
                 String userID = scanner.nextLine();
                 User friendToAdd = friendsList.get(userID);
+
                 selectedChatgroup.addFriendToChatGroup(friendToAdd);
             }
             // scroll up (get next set of older messages)
