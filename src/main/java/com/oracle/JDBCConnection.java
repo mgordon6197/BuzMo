@@ -16,13 +16,19 @@ public class JDBCConnection {
     private static String password = "123456";
     private static String dbDriver = "oracle.jdbc.driver.OracleDriver";
 
+    private static Connection connection = null;
+
     static Connection createDBConnection() throws SQLException {
         try {
             Class.forName(dbDriver);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        return DriverManager.getConnection(url, username, password);
+
+        if(connection == null)
+            connection = DriverManager.getConnection(url, username, password);
+
+        return connection;
     }
 
 //    static ResultSet execQuery(Connection con, String query) {
