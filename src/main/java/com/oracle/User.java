@@ -13,7 +13,6 @@ import java.sql.SQLException;
 public class User implements MessageQueryable{
     private String userId;
     private String name;
-    public static Connection con;
 
     public User(String userId) {
         this.userId = userId;
@@ -50,7 +49,7 @@ public class User implements MessageQueryable{
         System.out.println(query);
         Statement statement = null;
         try {
-            statement = con.createStatement();
+            statement = JDBCConnection.createDBConnection().createStatement();
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
                 String owner = result.getString("userid");

@@ -2,6 +2,8 @@ package com.oracle;
 
 import java.lang.*;
 import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -27,7 +29,6 @@ public class BuzMo
                 loggedUser = userLogin(connection);
                 if(loggedUser == null)
                     continue;
-                loggedUser.con = connection;
                 login = true;
             } catch (SQLException e) {
                 System.out.println(e.toString());
@@ -54,10 +55,37 @@ public class BuzMo
         String password = scanner.nextLine();
 
         // TODO: check if user is in database. also add necessary data to User or Manager objects.
+        boolean isUser = false;
+        boolean isManager = false;
+        try {
+            String query = "select email from Users where email='" + username + "'";
+            Connection con = JDBCConnection.createDBConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if(result.next()) {
+                isUser = true;
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("sqlexception during user login validation");
+        }
 
-        if (userType.equalsIgnoreCase("u"))
+        try {
+            String query = "select userid from Manager where userid='" + username + "'";
+            Connection con = JDBCConnection.createDBConnection();
+            Statement statement = con.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if(result.next()) {
+                isManager = true;
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("sqlexception during user login validation");
+        }
+
+        if (userType.equalsIgnoreCase("u") && isUser)
             return new User(username);
-        else if (userType.equalsIgnoreCase("m"))
+        else if (userType.equalsIgnoreCase("m") && isUser && isManager)
             return new Manager(username);
         else {
             System.out.println("Incorrect user type\n");
