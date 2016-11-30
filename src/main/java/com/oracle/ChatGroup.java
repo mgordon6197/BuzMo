@@ -7,23 +7,16 @@ import java.util.Date;
  *
  */
 public class ChatGroup implements MessageQueryable{
-    String groupId;
     String ownerId;
     String name;
+    int duration;
 
-    public ChatGroup(String ownerId, String groupId, String name) {
+    public ChatGroup(String ownerId, String name, int duration) {
         this.ownerId = ownerId;
-        this.groupId = groupId;
         this.name = name;
+        this.duration = duration;
     }
 
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
 
     public String getOwnerId() {
         return ownerId;
@@ -71,5 +64,9 @@ public class ChatGroup implements MessageQueryable{
     public void addFriendToChatGroup(User friendToAdd) {
 
         // TODO: invite friend to chatgroup.
+    }
+
+    public void createChatGroup(ChatGroup newChatgroup) {
+
     }
 }

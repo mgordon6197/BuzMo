@@ -45,15 +45,40 @@ public class Session {
             String input = scanner.nextLine();
             if(input.equalsIgnoreCase("g"))
                 selectExistingChatgroup();
-            if(input.equalsIgnoreCase("c"))
+            else if(input.equalsIgnoreCase("c"))
                 viewCircleAction();
-            if(input.equalsIgnoreCase("p"))
+            else if(input.equalsIgnoreCase("p"))
                 privateMessageAction();
+            else if(input.equalsIgnoreCase("a"))
+                createChatGroupAction();
             else if(input.equalsIgnoreCase("l"))
                 logout = true;
             else
                 System.out.println("Invalid action");
         }
+    }
+
+    private void createChatGroupAction() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter ChatGroup Name: ");
+        String groupName = scanner.nextLine();
+        if(groupName.length() <= 0) {
+            System.out.println("Invalid Group Name");
+            return;
+        }
+
+        System.out.print("Enter ChatGroup message duration: ");
+        String duration = scanner.nextLine();
+        if(duration.length() <= 0) {
+            System.out.println("Invalid Duration");
+            return;
+        }
+
+        ChatGroup newChatgroup = new ChatGroup(currentUser.getUserId(), groupName, Integer.parseInt(duration));
+        newChatgroup.createChatGroup(newChatgroup);
+        
+        inChatGroupOptions(newChatgroup);
     }
 
     private void privateMessageAction() {

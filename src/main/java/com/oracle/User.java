@@ -55,7 +55,8 @@ public class User implements MessageQueryable{
             while (result.next()) {
                 String owner = result.getString("userid");
                 String group = result.getString("gname");
-                chatGroups.put(group,new ChatGroup(owner,group,group));
+                int duration = result.getInt("duration");
+                chatGroups.put(group,new ChatGroup(owner,group,duration));
             }
             statement.close();
         } catch (SQLException e) {

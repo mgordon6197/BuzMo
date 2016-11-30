@@ -19,6 +19,8 @@ public class Constants {
                     "\tView Circle\n" +
                     "p:\n" +
                     "\tView/Create Private Message\n" +
+                    "a:\n" +
+                    "\tCreate new ChatGroup\n" +
                     "l:\n" +
                     "\tLogout";
 
