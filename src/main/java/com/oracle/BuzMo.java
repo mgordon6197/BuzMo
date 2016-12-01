@@ -54,7 +54,7 @@ public class BuzMo
         java.lang.System.out.print("Enter Password: ");
         String password = scanner.nextLine();
 
-        // TODO: check if user is in database. also add necessary data to User or Manager objects.
+        // check if user is in database. also add necessary data to User or Manager objects.
         boolean isUser = false;
         boolean isManager = false;
         try {

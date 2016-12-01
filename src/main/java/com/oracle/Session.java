@@ -51,10 +51,24 @@ public class Session {
                 privateMessageAction();
             else if(input.equalsIgnoreCase("a"))
                 createChatGroupAction();
+            else if(input.equalsIgnoreCase("r"))
+                viewRequestsAction();
             else if(input.equalsIgnoreCase("l"))
                 logout = true;
             else
                 System.out.println("Invalid action");
+        }
+    }
+
+    private void viewRequestsAction() {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Request> requests = currentUser.viewRequests();
+        for(Request request : requests) {
+            System.out.println(request.getType() + " : " + request.getAddTo().returnId());
+            System.out.print("Accept?(y/n) ");
+            String input = scanner.nextLine();
+            if(input.equalsIgnoreCase("y"));
+                request.acceptRequest();
         }
     }
 
@@ -77,7 +91,7 @@ public class Session {
 
         ChatGroup newChatgroup = new ChatGroup(currentUser.getUserId(), groupName, Integer.parseInt(duration));
         newChatgroup.createChatGroup(newChatgroup);
-        
+
         inChatGroupOptions(newChatgroup);
     }
 

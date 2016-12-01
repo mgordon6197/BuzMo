@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 /**
  *
  */
-public class ChatGroup implements MessageQueryable{
+public class ChatGroup implements MessageQueryable, Addable{
     String ownerId;
     String name;
     int duration;
@@ -102,6 +102,10 @@ public class ChatGroup implements MessageQueryable{
     }
 
     public void createChatGroup(ChatGroup newChatgroup) {
+        // TODO: create chatgroup from passed ChatGroup object.
+    }
 
+    public String returnId() {
+        return name;
     }
 }

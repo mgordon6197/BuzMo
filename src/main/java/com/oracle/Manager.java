@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Matthew on 11/22/2016.
+ *
  */
 public class Manager extends User {
     public Manager(String userId) {

@@ -10,7 +10,7 @@ import java.sql.SQLException;
 /**
  *
  */
-public class User implements MessageQueryable{
+public class User implements MessageQueryable, Addable{
     private String userId;
     private String name;
 
@@ -105,12 +105,21 @@ public class User implements MessageQueryable{
 
 
     public void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
-
-
-
         System.out.println("In Post to Circle");
 
         // TODO: post message to my circle and other users circle.
 
+    }
+
+    public ArrayList<Request> viewRequests() {
+        ArrayList<Request> requests = new ArrayList<Request>();
+
+        // TODO: select all of this users requests and put them into Request objects and return them.
+
+        return requests;
+    }
+
+    public String returnId() {
+        return userId;
     }
 }
