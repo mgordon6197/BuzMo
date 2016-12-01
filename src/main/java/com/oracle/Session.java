@@ -104,9 +104,9 @@ public class Session {
             browseUserSession = new BrowseUserSession(topics);
         }
 
-        ArrayList<Message> browseMessages = browseUserSession.queryMessages(new Date(), true);
+        ArrayList<User> browseUsers = browseUserSession.queryUsers();
 
-        inBrowseOptions(browseMessages, browseUserSession);
+        inBrowseUserOptions(browseUsers);
     }
 
     private void browseMessagesAction() {
@@ -129,10 +129,31 @@ public class Session {
         BrowseMessageSession browseMessageSession = new BrowseMessageSession(topics, matchAll);
         ArrayList<Message> browseMessages = browseMessageSession.queryMessages(new Date(), true);
 
-        inBrowseOptions(browseMessages, browseMessageSession);
+        inBrowseMessageOptions(browseMessages, browseMessageSession);
     }
 
-    private void inBrowseOptions(ArrayList<Message> browseMessages, MessageQueryable messageQueryable) {
+    private void inBrowseUserOptions(ArrayList<User> browseUsers) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean done = false;
+        while(!done) {
+            for(User user : browseUsers)
+                System.out.println(user.getUserId());
+
+            System.out.println(Constants.BrowseUserOptions);
+
+            String option = scanner.nextLine();
+            if (option.equals("1"))
+                done = true;
+            else if (option.equals("2"))
+                addFriend();
+            else
+                System.out.println("Invalid Option");
+        }
+
+    }
+
+    private void inBrowseMessageOptions(ArrayList<Message> browseMessages, MessageQueryable messageQueryable) {
         Scanner scanner = new Scanner(System.in);
 
         boolean done = false;
