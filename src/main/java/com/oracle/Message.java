@@ -54,7 +54,7 @@ public class Message {
 
     @Override
     public String toString() {
-        return getMessage();
+        return "\nFrom: " + ownerId + "\nDate Posted: " + datePosted.toString() + "\n" + message + "\n";
     }
 
     public void storeMessage() {
