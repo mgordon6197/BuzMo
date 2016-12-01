@@ -134,10 +134,10 @@ public class Session {
 
         ArrayList<Message> circleMessages;
         if(userId.equals(currentUser.getUserId()))
-            circleMessages = currentUser.queryMessages(new Date(), false);
+            circleMessages = currentUser.queryMessages(new Date(), true);
         else {
             User circleUser = new User(userId);
-            circleMessages = circleUser.queryMessages(new Date(), false);
+            circleMessages = circleUser.queryMessages(new Date(), true);
         }
 
         if(circleMessages == null) {

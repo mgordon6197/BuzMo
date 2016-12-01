@@ -65,11 +65,35 @@ public class User implements MessageQueryable, Addable{
 
     public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
         ArrayList<Message> circleMessages = new ArrayList<Message>();
+        // get circle messages where userid,messageid in circle,
+        // but make sure the messages match from over in messages, and the date is correct
+        String date = JDBCConnection.convertDate(queryDateParam);
+        if(messagesOlderThan) {
+            date = "M.tstamp < " + date + " order by M.mid desc ";
+        } else {
+            date = "M.tstamp > " + date + " order by M.mid asc ";
+        }
+        String query =
+                "select M.mid,M.sender,M.data " +
+                        "from Circle C, Messages M " +
+                        "where C.userid = '" + userId + "' and " +
+                        "C.messageid = M.mid and " +
+                        date +
+                        " ";
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while(result.next()) {
+                String mOwner = result.getString("sender").trim();
+                String mData = result.getString("data").trim();
+                Message message = new Message(mOwner, mData);
+                circleMessages.add(message);
+            }
 
-        // Test Data
-        circleMessages.add(new Message(userId, "Circle Message"));
-
-        // TODO: query this users circle. Sort by oldest first.
+        } catch (SQLException e) {
+            System.out.println("Error in circle: " + e.toString());
+        }
 
         return circleMessages;
     }
