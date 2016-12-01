@@ -59,7 +59,6 @@ public class ChatGroup implements MessageQueryable, Addable{
                             "GM.messageid = M.mid and " +
                             sqlcomparedate +
                             " ";
-            System.out.println(query);
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
@@ -121,8 +120,6 @@ public class ChatGroup implements MessageQueryable, Addable{
     public void updateName(String newName) throws SQLException {
 
         // insert new one, update, then remove old one
-
-
         String insertQuery = "insert into Group_Owner values (" +
                     "'" + newName + "'," + duration + ",'" + ownerId + "')";
         String updateQuery = "update Member_Of " +
@@ -148,8 +145,17 @@ public class ChatGroup implements MessageQueryable, Addable{
         newChatGroupRequest.createRequest();
     }
 
-    public void createChatGroup(ChatGroup newChatgroup) {
-        // TODO: create chatgroup from passed ChatGroup object.
+    public void createChatGroup(ChatGroup newChatgroup) throws SQLException {
+        String insertQuery = "insert into Group_Owner values (" +
+                "'" + newChatgroup.getName() + "'," + newChatgroup.duration + ",'" + newChatgroup.getOwnerId() + "')";
+        String insertQuery2 = "insert into Member_Of values (" +
+                "'" + newChatgroup.getName() + "','" + newChatgroup.getOwnerId() + "')";
+
+        Connection connection = JDBCConnection.createDBConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(insertQuery);
+        statement.executeUpdate(insertQuery2);
+        statement.close();
     }
 
     public String returnId() {

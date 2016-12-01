@@ -90,7 +90,12 @@ public class Session {
         }
 
         ChatGroup newChatgroup = new ChatGroup(currentUser.getUserId(), groupName, Integer.parseInt(duration));
-        newChatgroup.createChatGroup(newChatgroup);
+
+        try {
+            newChatgroup.createChatGroup(newChatgroup);
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
 
         inChatGroupOptions(newChatgroup);
     }
