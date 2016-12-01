@@ -229,7 +229,7 @@ public class Session {
 
     }
 
-    private void inViewCircleAndPrivateOptions(ArrayList<Message> firstMessages, String menu, MessageQueryable messageQueryable) {
+    private void inViewCircleAndPrivateOptions(ArrayList<Message> messages, String menu, MessageQueryable messageQueryable) {
         Scanner scanner = new Scanner(System.in);
 
         boolean done = false;
@@ -239,14 +239,18 @@ public class Session {
             if (option.equals("1")) {
                 Message message = createNewMessage();
                 messageQueryable.postMessage(message);
+
+                messages = messageQueryable.queryMessages(new Date(), true);
+                for(Message queryMessage : messages)
+                    System.out.println(queryMessage.toString());
             }
             else if (option.equals("2")) {
-                ArrayList<Message> messages = scrollUp(firstMessages, messageQueryable);
+                messages = scrollUp(messages, messageQueryable);
                 for(Message message : messages)
                     System.out.println(message.toString());
             }
             else if (option.equals("3")) {
-                ArrayList<Message> messages = scrollDown(firstMessages, messageQueryable);
+                messages = scrollDown(messages, messageQueryable);
                 for(Message message : messages)
                     System.out.println(message.toString());
             }
@@ -387,13 +391,19 @@ public class Session {
     }
 
     private ArrayList<Message> scrollDown(ArrayList<Message> messages, MessageQueryable messageQueryable) {
+        if(messages.size() <= 0)
+            return messages;
+
         Date queryDateParam = messages.get(messages.size() - 1).getDatePosted();
         ArrayList<Message> newMessages = messageQueryable.queryMessages(queryDateParam, false);
         Collections.reverse(newMessages);
         return newMessages;
     }
 
-    private ArrayList<Message> scrollUp(AbstractList<Message> messages, MessageQueryable messageQueryable) {
+    private ArrayList<Message> scrollUp(ArrayList<Message> messages, MessageQueryable messageQueryable) {
+        if(messages.size() <= 0)
+            return messages;
+
        Date queryDateParam = messages.get(0).getDatePosted();
         return messageQueryable.queryMessages(queryDateParam, true);
     }
