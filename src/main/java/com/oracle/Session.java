@@ -63,6 +63,17 @@ public class Session {
     }
 
     private void browseMessagesAction() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("What topics should be used to search? Delimit by comma:");
+        String topicInputString = scanner.nextLine();
+        String [] topicsAsStrings = topicInputString.replaceAll("\\s+","").toLowerCase().split(",");
+
+        ArrayList<Topic> topics = new ArrayList<Topic>();
+        for(String topicString : topicsAsStrings)
+            topics.add(new Topic(topicString));
+
+
         
     }
 
@@ -328,8 +339,10 @@ public class Session {
     private Message createNewMessage() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Messsage:");
-        String message = scanner.nextLine();
-        return new Message(currentUser.getUserId(), message);
+        String messageString = scanner.nextLine();
+        Message message =  new Message(currentUser.getUserId(), messageString);
+        message.storeMessage();
+        return  message;
     }
 
     private void createUserAction(){
