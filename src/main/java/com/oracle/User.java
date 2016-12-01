@@ -115,7 +115,7 @@ public class User implements MessageQueryable, Addable{
             for(Map.Entry<String, User> user : allFriends.entrySet())
                 System.out.println(user.getKey() + " : " + user.getValue().getName());
 
-            System.out.println("select friends to post in their circle. Delimit by a comma.");
+            System.out.println("Select friends to post in their circle. Delimit by a comma.");
             String usersString = scanner.nextLine();
             String [] userIds = usersString.replaceAll("\\s+","").split(",");
 
@@ -123,14 +123,23 @@ public class User implements MessageQueryable, Addable{
                 postToUsersCicle.put(userId, new User(userId));
         }
 
+        System.out.println("Select topics to define this message. Delimit by a comma.");
+        String topicsString = scanner.nextLine();
+        String [] topicAsStrings = topicsString.replaceAll("\\s+","").toLowerCase().split(",");
+
+        ArrayList<Topic> topics = new ArrayList<Topic>();
+        for(String topic : topicAsStrings)
+            topics.add(new Topic(topic));
+        message.addTopics(topics);
+
         postMessage(message, postToUsersCicle, isPublic);
     }
 
 
-    public void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
+    private void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
         System.out.println("In Post to Circle");
 
-        // TODO: post message to my circle and other users circle.
+        // TODO: post message to my circle and other users circle. assumes message already exists
 
     }
 

@@ -1,5 +1,6 @@
 package com.oracle;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -7,6 +8,7 @@ import java.util.Date;
  */
 public class Message {
     private String ownerId;
+    private String messageId;
     private String message;
     private Date datePosted;
 
@@ -42,5 +44,16 @@ public class Message {
     @Override
     public String toString() {
         return getMessage();
+    }
+
+    public void storeMessage() {
+
+        // TODO: store this message and assign the id to messageId.
+
+    }
+
+    public void addTopics(ArrayList<Topic> topics) {
+
+        // TODO: the message ID to these topics in database and create new topic entries if they don't exist.
     }
 }
