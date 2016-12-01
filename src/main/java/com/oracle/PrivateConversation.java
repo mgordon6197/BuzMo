@@ -29,11 +29,12 @@ public class PrivateConversation implements MessageQueryable {
             date = "M.tstamp >= " + date + " order by M.mid asc ";
         }
         String query =
-                "select M.mid,M.sender,M.data,M.tstamp" +
+                "select M.mid,M.sender,M.data,M.tstamp " +
                         "from Private_Messages PM, Messages M " +
                         "where PM.owner='" + currentUserId + "' and " +
-                            " PM.messageid=M.mid and " + date + " " +
-                            " (M.sender='"+currentUserId+"' or M.sender='"+otherUserId+"')";
+                            " PM.messageid=M.mid and " +
+                            " (M.sender='"+currentUserId+"' or M.sender='"+otherUserId+"') and " + date;
+
         try {
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
@@ -57,5 +58,6 @@ public class PrivateConversation implements MessageQueryable {
         System.out.println("In Private Conversation Post Message");
 
         // TODO: post message for the given two users private conversation.
+        
     }
 }

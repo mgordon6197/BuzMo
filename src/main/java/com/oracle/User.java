@@ -217,6 +217,7 @@ public class User implements MessageQueryable, Addable{
     public void addFriend(String userId) {
 
         // TODO: add friend to friends list. assumes the users are not already friends but doesn't guarantee that the passed userId exists.
-
+        Request friendRequest = new Request(new User(userId), this, RequestType.FRIEND_REQUEST);
+        friendRequest.createRequest();
     }
 }

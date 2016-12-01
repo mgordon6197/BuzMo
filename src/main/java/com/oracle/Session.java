@@ -144,9 +144,9 @@ public class Session {
 
             String option = scanner.nextLine();
             if (option.equals("1"))
-                done = true;
-            else if (option.equals("2"))
                 addFriend();
+            else if (option.equals("2"))
+                done = true;
             else
                 System.out.println("Invalid Option");
         }
@@ -185,7 +185,7 @@ public class Session {
 
         System.out.print("Enter UserID: ");
         String userId = scanner.nextLine();
-        if(currentUser.queryFriends().get(userId) != null)
+        if(currentUser.queryFriends().get(userId) == null)
             currentUser.addFriend(userId);
         else
             System.out.println("User is already your friend.");
@@ -244,7 +244,7 @@ public class Session {
         PrivateConversation privateConversation = new PrivateConversation(userId, currentUser.getUserId());
 
         Date dateQueryParam = new Date();
-        ArrayList<Message> privateMessages = privateConversation.queryMessages(dateQueryParam, false);
+        ArrayList<Message> privateMessages = privateConversation.queryMessages(dateQueryParam, true);
 
         for(Message privateMessage : privateMessages)
             System.out.println(privateMessage.toString());

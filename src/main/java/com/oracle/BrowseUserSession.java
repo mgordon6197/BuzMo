@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  *
  */
-public class BrowseUserSession implements MessageQueryable{
+public class BrowseUserSession {
     private ArrayList<Topic> topics = null;
     private String queryUserId = null;
 
@@ -38,7 +38,9 @@ public class BrowseUserSession implements MessageQueryable{
         this.queryUserId = queryUserId;
     }
 
-    public ArrayList<User> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
+    public ArrayList<User> queryUsers() {
+
+        // TODO: query Users based off either the email or topics in the instance variables. Only one of them will be initialized.
         ArrayList<User> u = new ArrayList<User>();
 
         if(queryUserId != null) {
@@ -57,17 +59,10 @@ public class BrowseUserSession implements MessageQueryable{
             }
         }
 
-        String date = JDBCConnection.convertDate(queryDateParam);
-        if(messagesOlderThan) {
-            date = "M.tstamp <= " + date + " order by M.mid desc ";
-        } else {
-            date = "M.tstamp >= " + date + " order by M.mid asc ";
-        }
-
         String query =
                 " select M.sender " +
-                " from Circle C, Topic_Message T, Message M " +
-                " where C.messageid=T.messageid and C.messageid=M.mid and " + date;
+                        " from Circle C, Topic_Message T, Message M " +
+                        " where C.messageid=T.messageid and C.messageid=M.mid";
         try {
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
@@ -104,18 +99,5 @@ public class BrowseUserSession implements MessageQueryable{
         }
 
         return u;
-    }
-
-    public void postMessage(Message message) {
-        // DONT IMPPLEMENT MEEEE
-    }
-
-    public ArrayList<User> queryUsers() {
-
-        ArrayList<User> Users = new ArrayList<User>();
-
-        // TODO: query Users based off either the email or topics in the instance variables. Only one of them will be initialized.
-
-        return Users;
     }
 }
