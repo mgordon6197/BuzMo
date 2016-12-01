@@ -1,6 +1,5 @@
 package com.oracle;
 
-import java.net.CookieHandler;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -142,6 +141,9 @@ public class Session {
                 System.out.println(message);
 
             System.out.println(Constants.BrowseOptionMenu);
+            if(messageQueryable instanceof BrowseUserSession)
+                System.out.println(Constants.BrowseUserOptions);
+
             String option = scanner.nextLine();
             if (option.equals("1"))
                 browseMessages = scrollUp(browseMessages, messageQueryable);
@@ -149,10 +151,23 @@ public class Session {
                 browseMessages = scrollDown(browseMessages, messageQueryable);
             else if (option.equals("3"))
                 done = true;
+            else if (option.equals("4"))
+                addFriend();
             else
                 System.out.println("Invalid Option");
         }
 
+    }
+
+    private void addFriend() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter UserID: ");
+        String userId = scanner.nextLine();
+        if(currentUser.queryFriends().get(userId) != null)
+            currentUser.addFriend(userId);
+        else
+            System.out.println("User is already your friend.");
     }
 
     private void viewRequestsAction() {
@@ -459,7 +474,7 @@ public class Session {
             if(!validateUser(username, password, secondPass))
                 return;
 
-            addUser(username, password);
+            createUser(username, password);
             System.out.println("Successfully added user " + username);
 
         } catch (SQLException e) {
@@ -467,7 +482,7 @@ public class Session {
         }
     }
 
-    private void addUser(String username, String password) throws SQLException {
+    private void createUser(String username, String password) throws SQLException {
 
         if(currentUser instanceof Manager) {
             Manager manager = (Manager)currentUser;

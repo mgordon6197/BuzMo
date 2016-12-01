@@ -211,4 +211,10 @@ public class User implements MessageQueryable, Addable{
     public String returnId() {
         return userId;
     }
+
+    public void addFriend(String userId) {
+
+        // TODO: add friend to friends list. assumes the users are not already friends but doesn't guarantee that the passed userId exists.
+
+    }
 }
