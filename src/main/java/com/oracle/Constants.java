@@ -76,4 +76,7 @@ public class Constants {
                     "\tScroll down (newer)\n" +
                     "4:\n" +
                     "\tBack to main menu";
+    public static final String BrowseUserOptions =
+            "5:\n" +
+                    "\tAdd user\n";
 }
