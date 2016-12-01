@@ -1,7 +1,13 @@
 package com.oracle;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -35,13 +41,42 @@ public class ChatGroup implements MessageQueryable{
     }
 
     public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
-
+        // if messagesOlderThan == true then we want messages OLDER than queryDateParam
+        // e.g., if
         ArrayList<Message> messages = new ArrayList<Message>();
 
         // test data
         messages.add(new Message("messageownerid", "Hello this is a message."));
 
         // TODO: query most recent messages in this chat in order of oldest first.
+        try {
+            DateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            String sqlstringdate = dateformat.format(queryDateParam);
+            String sqlcomparedate = "";
+            if(messagesOlderThan) {
+                sqlcomparedate = "M.tstamp < '" + sqlstringdate + "' order by desc ";
+            } else {
+                sqlcomparedate = "M.tstamp > '" + sqlstringdate + "' order by asc ";
+            }
+            String query =
+                    "select " +
+                    "from Group_Messages GM, Messages M " +
+                    "where GM.group_name = '" + name + "' and " +
+                            "GM.messageid = M.mid and " +
+                            "date < querydate and " + sqlcomparedate +
+                            " limit 7";
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while(result.next()) {
+
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("SQL exception in queryMessages in chatgroup");
+        }
+
+
 
         return messages;
     }
