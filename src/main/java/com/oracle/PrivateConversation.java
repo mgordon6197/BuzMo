@@ -58,6 +58,23 @@ public class PrivateConversation implements MessageQueryable {
         System.out.println("In Private Conversation Post Message");
 
         // TODO: post message for the given two users private conversation.
-        
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+
+            String q1 = "insert into Private_Messages values " +
+                    "(" + message.getMessageId() + ",'" + currentUserId + "')";
+            String q2 = "insert into Private_Messages values " +
+                    "(" + message.getMessageId() + ",'" + otherUserId + "')";
+
+            statement.executeUpdate(q1);
+            statement.executeUpdate(q2);
+
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Error in circle: " + e.toString());
+        }
+
+
     }
 }

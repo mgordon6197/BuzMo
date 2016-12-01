@@ -60,8 +60,8 @@ public class BrowseUserSession {
         }
 
         String query =
-                " select M.sender " +
-                        " from Circle C, Topic_Message T, Message M " +
+                " select distinct M.sender " +
+                        " from Circle C, Topic_Message T, Messages M " +
                         " where C.messageid=T.messageid and C.messageid=M.mid";
         try {
             Connection connection = JDBCConnection.createDBConnection();
@@ -74,7 +74,7 @@ public class BrowseUserSession {
 
             for(String userid : users) {
                 query = " select distinct T.topic" +
-                        " from Topic_Message T, Message M" +
+                        " from Topic_Message T, Messages M" +
                         " where T.messageid=M.mid and M.sender='"+userid+"'";
                 result = statement.executeQuery(query);
                 ArrayList<Topic> userTopics = new ArrayList<Topic>();
