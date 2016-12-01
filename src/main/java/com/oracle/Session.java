@@ -391,13 +391,19 @@ public class Session {
     }
 
     private ArrayList<Message> scrollDown(ArrayList<Message> messages, MessageQueryable messageQueryable) {
+        if(messages.size() <= 0)
+            return messages;
+
         Date queryDateParam = messages.get(messages.size() - 1).getDatePosted();
         ArrayList<Message> newMessages = messageQueryable.queryMessages(queryDateParam, false);
         Collections.reverse(newMessages);
         return newMessages;
     }
 
-    private ArrayList<Message> scrollUp(AbstractList<Message> messages, MessageQueryable messageQueryable) {
+    private ArrayList<Message> scrollUp(ArrayList<Message> messages, MessageQueryable messageQueryable) {
+        if(messages.size() <= 0)
+            return messages;
+
        Date queryDateParam = messages.get(0).getDatePosted();
         return messageQueryable.queryMessages(queryDateParam, true);
     }
