@@ -41,4 +41,8 @@ public class Request {
     public void acceptRequest() {
         // TODO: accept the request in the database
     }
+
+    public void createRequest() {
+        // TODO: create a request with the given fields.
+    }
 }

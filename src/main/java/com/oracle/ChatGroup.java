@@ -99,7 +99,9 @@ public class ChatGroup implements MessageQueryable, Addable{
 
     public void addFriendToChatGroup(User friendToAdd) {
 
-        // TODO: invite friend to chatgroup.
+        Request newChatGroupRequest = new Request(friendToAdd, this, RequestType.CHATGROUP_INVITE);
+
+        newChatGroupRequest.createRequest();
     }
 
     public void createChatGroup(ChatGroup newChatgroup) {
