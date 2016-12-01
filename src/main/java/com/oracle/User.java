@@ -138,12 +138,26 @@ public class User implements MessageQueryable, Addable{
         postMessage(message, postToUsersCicle, isPublic);
     }
 
-    // list does not include me
     private void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
         System.out.println("In Post to Circle");
 
-        // TODO: post message to my circle and other users circle. assumes message already exists
-
+        postToUsersCircle.put(userId,null);
+        for(Map.Entry<String,User>user : postToUsersCircle.entrySet()) {
+            String query = "insert into Circle values (" +
+                    "'"+user.getKey()+"',"+message.getMessageId();
+            if(isPublic)
+                query += ",1)";
+            else
+                query += ",0)";
+            try {
+                Connection connection = JDBCConnection.createDBConnection();
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(query);
+                statement.close();
+            } catch (SQLException e) {
+                System.out.println("error in postMessage to circle: " + e.toString());
+            }
+        }
     }
 
     public ArrayList<Request> viewRequests() {
