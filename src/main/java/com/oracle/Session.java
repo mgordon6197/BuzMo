@@ -6,7 +6,7 @@ import java.util.*;
 /**
  *
  */
-public class Session {
+public class Session implements MessageQueryable {
     private User currentUser;
 
     public Session(User loggedUser) {
@@ -391,5 +391,15 @@ public class Session {
         }
 
         return true;
+    }
+
+    public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
+        ArrayList<Message> messages = new ArrayList<Message>();
+
+        return messages;
+    }
+
+    public void postMessage(Message message) {
+
     }
 }
