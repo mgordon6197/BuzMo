@@ -118,10 +118,27 @@ public class ChatGroup implements MessageQueryable, Addable{
         }
     }
 
-    public void updateName(String newName) {
+    public void updateName(String newName) throws SQLException {
 
-        // TODO: update chatgroup row with newName.
+        // insert new one, update, then remove old one
 
+
+        String insertQuery = "insert into Group_Owner values (" +
+                    "'" + newName + "'," + duration + ",'" + ownerId + "')";
+        String updateQuery = "update Member_Of " +
+                    " set gname= '" + newName + "' " +
+                    " where gname = '" + name + "' and userid = '" + ownerId + "'";
+        String removeQuery = "delete from Group_Owner" +
+                    " where gname = '" + name + "'";
+
+        Connection connection = JDBCConnection.createDBConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(insertQuery);
+        statement.execute(updateQuery);
+        statement.execute(removeQuery);
+        statement.close();
+
+        name = newName;
     }
 
     public void addFriendToChatGroup(User friendToAdd) {

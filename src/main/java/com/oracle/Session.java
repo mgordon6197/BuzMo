@@ -293,7 +293,11 @@ public class Session {
             else if(option.equals("7") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {
                 System.out.print("Enter new ChatGroup name: ");
                 String newName = scanner.nextLine();
-                selectedChatgroup.updateName(newName);
+                try {
+                    selectedChatgroup.updateName(newName);
+                } catch (SQLException e) {
+                    System.out.println(e.toString());
+                }
             }
             else
                 System.out.println("INVALID OPTION\n");
