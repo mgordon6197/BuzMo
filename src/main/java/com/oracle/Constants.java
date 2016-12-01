@@ -23,10 +23,21 @@ public class Constants {
                     "\tCreate new ChatGroup\n" +
                     "m:\n" +
                     "\tBrowse Messages\n" +
+                    "u:\n" +
+                    "\tBrowse Users\n" +
                     "r:\n" +
                     "\tView Requests\n" +
                     "l:\n" +
                     "\tLogout";
+
+    public static final String BrowseOptionMenu =
+            "Select from the following options:\n" +
+                    "1:\n" +
+                    "\tScroll up (older)\n" +
+                    "2:\n" +
+                    "\tScroll down (newer)\n" +
+                    "3:\n" +
+                    "\tBack to main menu\n";
 
     public static final String userChatGroupMessageOptions =
             "Select from the following options:\n" +

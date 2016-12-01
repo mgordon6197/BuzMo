@@ -6,7 +6,7 @@ import java.util.*;
 /**
  *
  */
-public class Session implements MessageQueryable {
+public class Session {
     private User currentUser;
 
     public Session(User loggedUser) {
@@ -53,6 +53,8 @@ public class Session implements MessageQueryable {
                 createChatGroupAction();
             else if(input.equalsIgnoreCase("m"))
                 browseMessagesAction();
+            else if(input.equalsIgnoreCase("u"))
+                browseUsersAction();
             else if(input.equalsIgnoreCase("r"))
                 viewRequestsAction();
             else if(input.equalsIgnoreCase("l"))
@@ -60,6 +62,34 @@ public class Session implements MessageQueryable {
             else
                 System.out.println("Invalid action");
         }
+    }
+
+    private void browseUsersAction() {
+        Scanner scanner = new Scanner(System.in);
+
+        BrowseUserSession browseUserSession = null;
+        System.out.print("Search by User ID?(y/n): ");
+        String useEmail = scanner.nextLine();
+        if(useEmail.equalsIgnoreCase("y")) {
+            System.out.print("Enter Users ID: ");
+            String userID = scanner.nextLine();
+            browseUserSession = new BrowseUserSession(userID);
+        }
+        else {
+            System.out.println("Enter Topics delimited by a comma: ");
+            String topicsInputString = scanner.nextLine();
+            String [] topicsAsStrings = topicsInputString.replaceAll("\\s+","").toLowerCase().split(",");
+
+            ArrayList<Topic> topics = new ArrayList<Topic>();
+            for(String topicString : topicsAsStrings)
+                topics.add(new Topic(topicString));
+
+            browseUserSession = new BrowseUserSession(topics);
+        }
+
+        ArrayList<Message> browseMessages = browseUserSession.queryMessages(new Date(), true);
+
+        inBrowseOptions(browseMessages, browseUserSession);
     }
 
     private void browseMessagesAction() {
@@ -73,8 +103,38 @@ public class Session implements MessageQueryable {
         for(String topicString : topicsAsStrings)
             topics.add(new Topic(topicString));
 
+        System.out.print("Should the messages match all of the topics?(y/n): ");
+        String matchInput = scanner.nextLine();
+        boolean matchAll = false;
+        if(matchInput.equalsIgnoreCase("y"))
+            matchAll = true;
 
-        
+        BrowseMessageSession browseMessageSession = new BrowseMessageSession(topics, matchAll);
+        ArrayList<Message> browseMessages = browseMessageSession.queryMessages(new Date(), true);
+
+        inBrowseOptions(browseMessages, browseMessageSession);
+    }
+
+    private void inBrowseOptions(ArrayList<Message> browseMessages, MessageQueryable messageQueryable) {
+        Scanner scanner = new Scanner(System.in);
+
+        boolean done = false;
+        while(!done) {
+            for(Message message : browseMessages)
+                System.out.println(message);
+
+            System.out.println(Constants.BrowseOptionMenu);
+            String option = scanner.nextLine();
+            if (option.equals("1"))
+                browseMessages = scrollUp(browseMessages, messageQueryable);
+            else if (option.equals("2"))
+                browseMessages = scrollDown(browseMessages, messageQueryable);
+            else if (option.equals("3"))
+                done = true;
+            else
+                System.out.println("Invalid Option");
+        }
+
     }
 
     private void viewRequestsAction() {
@@ -328,7 +388,9 @@ public class Session implements MessageQueryable {
 
     private ArrayList<Message> scrollDown(ArrayList<Message> messages, MessageQueryable messageQueryable) {
         Date queryDateParam = messages.get(messages.size() - 1).getDatePosted();
-        return messageQueryable.queryMessages(queryDateParam, false);
+        ArrayList<Message> newMessages = messageQueryable.queryMessages(queryDateParam, false);
+        Collections.reverse(newMessages);
+        return newMessages;
     }
 
     private ArrayList<Message> scrollUp(AbstractList<Message> messages, MessageQueryable messageQueryable) {
@@ -391,15 +453,5 @@ public class Session implements MessageQueryable {
         }
 
         return true;
-    }
-
-    public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
-        ArrayList<Message> messages = new ArrayList<Message>();
-
-        return messages;
-    }
-
-    public void postMessage(Message message) {
-
     }
 }
