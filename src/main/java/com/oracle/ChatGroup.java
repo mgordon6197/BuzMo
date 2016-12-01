@@ -20,6 +20,12 @@ public class ChatGroup implements MessageQueryable, Addable{
         this.duration = duration;
     }
 
+    public ChatGroup(String ownerId) {
+        this.ownerId = ownerId;
+        this.name = "";
+        this.duration = 7;
+    }
+
 
     public String getOwnerId() {
         return ownerId;

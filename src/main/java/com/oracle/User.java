@@ -180,6 +180,31 @@ public class User implements MessageQueryable, Addable{
 
         // TODO: select all of this users requests and put them into Request objects and return them.
 
+        try {
+            String query1 = "select sender from Friend_Requests " +
+                    " where receiver = '" + userId + "'";
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query1);
+            while(result.next()) {
+                String sender = result.getString("sender");
+                requests.add(new Request(new User(userId),new User(sender),RequestType.FRIEND_REQUEST));
+            }
+            statement.close();
+
+            String query2 = "select group_name from Chatgroup_Requests " +
+                    " where receiver = '" + userId + "'";
+            statement = connection.createStatement();
+            result = statement.executeQuery(query1);
+            while(result.next()) {
+                String group_name = result.getString("group_name");
+                requests.add(new Request(new User(userId),new ChatGroup(group_name),RequestType.CHATGROUP_INVITE));
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Error in viewRequests, User: " + e.toString());
+        }
+
         return requests;
     }
 

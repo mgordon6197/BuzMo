@@ -386,7 +386,10 @@ public class Session {
                 System.out.print("Enter user ID: ");
                 String userID = scanner.nextLine();
                 User friendToAdd = friendsList.get(userID);
-
+                if(friendToAdd == null) {
+                    System.out.println("NOT FRIEND. BYE");
+                    continue;
+                }
                 selectedChatgroup.addFriendToChatGroup(friendToAdd);
             }
             // scroll up (get next set of older messages)
