@@ -96,7 +96,7 @@ public class Session {
         else {
             System.out.println("Enter Topics delimited by a comma: ");
             String topicsInputString = scanner.nextLine();
-            String [] topicsAsStrings = topicsInputString.replaceAll("\\s+","").toLowerCase().split(",");
+            String [] topicsAsStrings = topicsInputString.replaceAll("\\s+","").split(",");
 
             ArrayList<Topic> topics = new ArrayList<Topic>();
             for(String topicString : topicsAsStrings)
@@ -115,7 +115,7 @@ public class Session {
 
         System.out.println("What topics should be used to search? Delimit by comma:");
         String topicInputString = scanner.nextLine();
-        String [] topicsAsStrings = topicInputString.replaceAll("\\s+","").toLowerCase().split(",");
+        String [] topicsAsStrings = topicInputString.replaceAll("\\s+","").split(",");
 
         ArrayList<Topic> topics = new ArrayList<Topic>();
         for(String topicString : topicsAsStrings)

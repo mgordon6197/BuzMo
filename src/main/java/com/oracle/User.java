@@ -142,7 +142,7 @@ public class User implements MessageQueryable, Addable{
 
         System.out.println("Select topics to define this message. Delimit by a comma.");
         String topicsString = scanner.nextLine();
-        String [] topicAsStrings = topicsString.replaceAll("\\s+","").toLowerCase().split(",");
+        String [] topicAsStrings = topicsString.replaceAll("\\s+","").split(",");
 
         ArrayList<Topic> topics = new ArrayList<Topic>();
         for(String topic : topicAsStrings)
