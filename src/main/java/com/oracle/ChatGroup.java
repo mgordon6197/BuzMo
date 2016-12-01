@@ -48,9 +48,9 @@ public class ChatGroup implements MessageQueryable, Addable{
             sqlstringdate = "TO_TIMESTAMP('" + sqlstringdate + "','" + "yyyy-mm-dd hh:mi:ss')";
             String sqlcomparedate = "";
             if(messagesOlderThan) {
-                sqlcomparedate = "M.tstamp < " + sqlstringdate + " order by M.mid desc ";
+                sqlcomparedate = "M.tstamp <= " + sqlstringdate + " order by M.mid desc ";
             } else {
-                sqlcomparedate = "M.tstamp > " + sqlstringdate + " order by M.mid asc ";
+                sqlcomparedate = "M.tstamp >= " + sqlstringdate + " order by M.mid asc ";
             }
             String query =
                     "select M.mid,M.sender,M.data " +

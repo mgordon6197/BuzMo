@@ -1,5 +1,9 @@
 package com.oracle;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -18,10 +22,35 @@ public class PrivateConversation implements MessageQueryable {
     public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
         ArrayList<Message> privateMessages = new ArrayList<Message>();
 
-        // Test Data
-        privateMessages.add(new Message(currentUserId, "Private Message"));
+//        String date = JDBCConnection.convertDate(queryDateParam);
+//        if(messagesOlderThan) {
+//            date = "M.tstamp <= " + date + " order by M.mid desc ";
+//        } else {
+//            date = "M.tstamp >= " + date + " order by M.mid asc ";
+//        }
+//        String query =
+//                "select M.mid,M.sender,M.data " +
+//                        "from Private_Messages PM, Messages M " +
+//                        "where C.userid = '" + userId + "' and " +
+//                        "C.messageid = M.mid and " +
+//                        date +
+//                        " ";
+//        try {
+//            Connection connection = JDBCConnection.createDBConnection();
+//            Statement statement = connection.createStatement();
+//            ResultSet result = statement.executeQuery(query);
+//            while(result.next()) {
+//                String mOwner = result.getString("sender").trim();
+//                String mData = result.getString("data").trim();
+//                // TODO GET OPICS WORDS TOO
+//                Message message = new Message(mOwner, mData);
+//                circleMessages.add(message);
+//            }
+//
+//        } catch (SQLException e) {
+//            System.out.println("Error in circle: " + e.toString());
+//        }
 
-        // TODO: query private messages for the given two users.
 
         return privateMessages;
     }
