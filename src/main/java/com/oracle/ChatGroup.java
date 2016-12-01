@@ -78,8 +78,11 @@ public class ChatGroup implements MessageQueryable, Addable{
     }
 
     public void postMessage(Message message) {
-
+        Date postdate = new Date();
+        // abstract date part
         // TODO: store the message in the database.
+        
+
     }
 
     public void updateDuration(String newDuration) {
