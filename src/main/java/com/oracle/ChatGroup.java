@@ -59,7 +59,6 @@ public class ChatGroup implements MessageQueryable, Addable{
                             "GM.messageid = M.mid and " +
                             sqlcomparedate +
                             " ";
-            System.out.println(query);
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
@@ -77,21 +76,66 @@ public class ChatGroup implements MessageQueryable, Addable{
         return messages;
     }
 
+    // assume message is less than 1400 characters?
     public void postMessage(Message message) {
+        // TODO CHANGE MID
+        int mid = 30;
+        String date = JDBCConnection.convertDate(new Date());
+        String data = "'" + message.getMessage() + "'";
+        String sender = "'" + message.getOwnerId() + "'";
+        String groupid = "'" + name + "'";
 
-        // TODO: store the message in the database.
+        String query1 = "insert into Messages values ("+mid +","+ data +","+ date +","+ sender+")";
+        String query2 = "insert into Group_Messages values ("+groupid +","+ mid +","+ date+")";
+
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query1);
+            statement.executeUpdate(query2);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("SQL Exception in postMessage in chatgroup: " + e.toString());
+        }
     }
 
-    public void updateDuration(String newDuration) {
+    public void updateDuration(int newDuration) {
         // delete from messages where mid =
         //     select messageid from group_messages g where g.group_name = 'name' and g.since < newduration
         // TODO: update chatgroup row with newDuration.
+
+        String query = "update Group_Owner" +
+                " set duration = " + newDuration + " " +
+                " where gname = '" + name + "'";
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("SQL Exception in updateDuration: " + e.toString());
+        }
     }
 
-    public void updateName(String newName) {
+    public void updateName(String newName) throws SQLException {
 
-        // TODO: update chatgroup row with newName.
+        // insert new one, update, then remove old one
+        String insertQuery = "insert into Group_Owner values (" +
+                    "'" + newName + "'," + duration + ",'" + ownerId + "')";
+        String updateQuery = "update Member_Of " +
+                    " set gname= '" + newName + "' " +
+                    " where gname = '" + name + "' and userid = '" + ownerId + "'";
+        String removeQuery = "delete from Group_Owner" +
+                    " where gname = '" + name + "'";
 
+        Connection connection = JDBCConnection.createDBConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(insertQuery);
+        statement.execute(updateQuery);
+        statement.execute(removeQuery);
+        statement.close();
+
+        name = newName;
     }
 
     public void addFriendToChatGroup(User friendToAdd) {
@@ -101,8 +145,17 @@ public class ChatGroup implements MessageQueryable, Addable{
         newChatGroupRequest.createRequest();
     }
 
-    public void createChatGroup(ChatGroup newChatgroup) {
-        // TODO: create chatgroup from passed ChatGroup object.
+    public void createChatGroup(ChatGroup newChatgroup) throws SQLException {
+        String insertQuery = "insert into Group_Owner values (" +
+                "'" + newChatgroup.getName() + "'," + newChatgroup.duration + ",'" + newChatgroup.getOwnerId() + "')";
+        String insertQuery2 = "insert into Member_Of values (" +
+                "'" + newChatgroup.getName() + "','" + newChatgroup.getOwnerId() + "')";
+
+        Connection connection = JDBCConnection.createDBConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(insertQuery);
+        statement.executeUpdate(insertQuery2);
+        statement.close();
     }
 
     public String returnId() {

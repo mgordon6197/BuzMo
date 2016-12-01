@@ -96,7 +96,12 @@ public class Session {
         }
 
         ChatGroup newChatgroup = new ChatGroup(currentUser.getUserId(), groupName, Integer.parseInt(duration));
-        newChatgroup.createChatGroup(newChatgroup);
+
+        try {
+            newChatgroup.createChatGroup(newChatgroup);
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
 
         inChatGroupOptions(newChatgroup);
     }
@@ -292,13 +297,18 @@ public class Session {
             else if(option.equals("6") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {
                 System.out.print("Enter new ChatGroup message duration(seconds): ");
                 String newDuration = scanner.nextLine();
-                selectedChatgroup.updateDuration(newDuration);
+                int duration = Integer.parseInt(newDuration);
+                selectedChatgroup.updateDuration(duration);
             }
             // update chatgroup name
             else if(option.equals("7") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {
                 System.out.print("Enter new ChatGroup name: ");
                 String newName = scanner.nextLine();
-                selectedChatgroup.updateName(newName);
+                try {
+                    selectedChatgroup.updateName(newName);
+                } catch (SQLException e) {
+                    System.out.println(e.toString());
+                }
             }
             else
                 System.out.println("INVALID OPTION\n");
