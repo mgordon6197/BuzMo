@@ -20,11 +20,10 @@ PRIMARY KEY(topic)
 );
 
 CREATE TABLE Messages (
-mid INTEGER UNIQUE,
+mid NUMBER GENERATED ALWAYS AS IDENTITY,
 data CHAR(1400),
 tstamp timestamp,
 sender CHAR(20),
-PRIMARY KEY (mid,sender),
 FOREIGN KEY (sender) REFERENCES Users(email)
 );
 

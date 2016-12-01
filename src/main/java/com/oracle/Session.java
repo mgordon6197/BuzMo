@@ -51,6 +51,8 @@ public class Session {
                 privateMessageAction();
             else if(input.equalsIgnoreCase("a"))
                 createChatGroupAction();
+            else if(input.equalsIgnoreCase("m"))
+                browseMessagesAction();
             else if(input.equalsIgnoreCase("r"))
                 viewRequestsAction();
             else if(input.equalsIgnoreCase("l"))
@@ -58,6 +60,10 @@ public class Session {
             else
                 System.out.println("Invalid action");
         }
+    }
+
+    private void browseMessagesAction() {
+        
     }
 
     private void viewRequestsAction() {
@@ -296,8 +302,6 @@ public class Session {
             }
             else
                 System.out.println("INVALID OPTION\n");
-
-
         }
     }
 
