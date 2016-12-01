@@ -229,7 +229,7 @@ public class Session {
 
     }
 
-    private void inViewCircleAndPrivateOptions(ArrayList<Message> firstMessages, String menu, MessageQueryable messageQueryable) {
+    private void inViewCircleAndPrivateOptions(ArrayList<Message> messages, String menu, MessageQueryable messageQueryable) {
         Scanner scanner = new Scanner(System.in);
 
         boolean done = false;
@@ -239,14 +239,18 @@ public class Session {
             if (option.equals("1")) {
                 Message message = createNewMessage();
                 messageQueryable.postMessage(message);
+
+                messages = messageQueryable.queryMessages(new Date(), true);
+                for(Message queryMessage : messages)
+                    System.out.println(queryMessage.toString());
             }
             else if (option.equals("2")) {
-                ArrayList<Message> messages = scrollUp(firstMessages, messageQueryable);
+                messages = scrollUp(messages, messageQueryable);
                 for(Message message : messages)
                     System.out.println(message.toString());
             }
             else if (option.equals("3")) {
-                ArrayList<Message> messages = scrollDown(firstMessages, messageQueryable);
+                messages = scrollDown(messages, messageQueryable);
                 for(Message message : messages)
                     System.out.println(message.toString());
             }
