@@ -404,7 +404,7 @@ public class Session {
         if(messages.size() <= 0)
             return messages;
 
-       Date queryDateParam = messages.get(0).getDatePosted();
+        Date queryDateParam = messages.get(0).getDatePosted();
         return messageQueryable.queryMessages(queryDateParam, true);
     }
 
