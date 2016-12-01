@@ -195,10 +195,12 @@ public class User implements MessageQueryable, Addable{
             String query2 = "select group_name from Chatgroup_Requests " +
                     " where receiver = '" + userId + "'";
             statement = connection.createStatement();
-            result = statement.executeQuery(query1);
+            result = statement.executeQuery(query2);
             while(result.next()) {
-                String group_name = result.getString("group_name");
-                requests.add(new Request(new User(userId),new ChatGroup(group_name),RequestType.CHATGROUP_INVITE));
+                String group_name = result.getString("group_name").trim();
+                ChatGroup chat = new ChatGroup(group_name,group_name,7);
+
+                requests.add(new Request(new User(userId),chat,RequestType.CHATGROUP_INVITE));
             }
             statement.close();
         } catch (SQLException e) {
