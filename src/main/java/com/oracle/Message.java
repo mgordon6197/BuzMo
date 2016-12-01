@@ -20,6 +20,14 @@ public class Message {
         this.message = message;
     }
 
+    public int getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(int messageId) {
+        this.messageId = messageId;
+    }
+
     public String getOwnerId() {
         return ownerId;
     }
@@ -50,20 +58,20 @@ public class Message {
     }
 
     public void storeMessage() {
-        // TODO: store this message and assign the id to messageId.
-        messageId = 5125; //TODO NEXT MID
         datePosted = new Date();
         String date = JDBCConnection.convertDate(datePosted);
-
-        String query1 = "insert into Messages values ("+messageId +",'"+ message +"',"+ date +",'"+ ownerId+"')";
+        int max = 0;
+        String query1 = "insert into Messages(data,tstamp,sender) values ('"+ message +"',"+ date +",'"+ ownerId+"')";
         try {
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
             statement.executeUpdate(query1);
             statement.close();
+            max = JDBCConnection.maxMid();
         } catch (SQLException e) {
             System.out.println("Error wihle storing message. : " + e.toString());
         }
+        messageId = max;
     }
 
     public void addTopics(ArrayList<Topic> topics) {
@@ -76,8 +84,6 @@ public class Message {
             String query2 = "insert into Topic_Message values (" +
                     "'" + topic.getTopic() + "'," + messageId + ")";
 
-            System.out.println(query);
-            System.out.println(query2);
             try {
                 Connection connection = JDBCConnection.createDBConnection();
                 Statement statement = connection.createStatement();

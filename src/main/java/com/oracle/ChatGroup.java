@@ -78,20 +78,16 @@ public class ChatGroup implements MessageQueryable, Addable{
 
     // assume message is less than 1400 characters?
     public void postMessage(Message message) {
-        // TODO CHANGE MID
-        int mid = 30;
         String date = JDBCConnection.convertDate(new Date());
         String data = "'" + message.getMessage() + "'";
         String sender = "'" + message.getOwnerId() + "'";
         String groupid = "'" + name + "'";
 
-        String query1 = "insert into Messages values ("+mid +","+ data +","+ date +","+ sender+")";
-        String query2 = "insert into Group_Messages values ("+groupid +","+ mid +","+ date+")";
+        String query2 = "insert into Group_Messages values ("+groupid +","+ message.getMessageId() +","+ date+")";
 
         try {
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
-            statement.executeUpdate(query1);
             statement.executeUpdate(query2);
             statement.close();
         } catch (SQLException e) {
@@ -100,9 +96,6 @@ public class ChatGroup implements MessageQueryable, Addable{
     }
 
     public void updateDuration(int newDuration) {
-        // delete from messages where mid =
-        //     select messageid from group_messages g where g.group_name = 'name' and g.since < newduration
-        // TODO: update chatgroup row with newDuration.
 
         String query = "update Group_Owner" +
                 " set duration = " + newDuration + " " +
