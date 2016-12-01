@@ -98,7 +98,6 @@ public class Request {
                         " and not exists (select NULL " +
                         " from Friend_Requests where sender='" + userToAdd.getUserId() + "' and " +
                                                         " receiver='" + addTo.returnId() + "')";
-                System.out.println(query1);
                 statement.executeQuery(query1);
                 statement.close();
             } else if(type == RequestType.CHATGROUP_INVITE) {

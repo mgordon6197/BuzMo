@@ -22,36 +22,35 @@ public class PrivateConversation implements MessageQueryable {
     public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
         ArrayList<Message> privateMessages = new ArrayList<Message>();
 
-//        String date = JDBCConnection.convertDate(queryDateParam);
-//        if(messagesOlderThan) {
-//            date = "M.tstamp <= " + date + " order by M.mid desc ";
-//        } else {
-//            date = "M.tstamp >= " + date + " order by M.mid asc ";
-//        }
-//        String query =
-//                "select M.mid,M.sender,M.data " +
-//                        "from Private_Messages PM, Messages M " +
-//                        "where C.userid = '" + userId + "' and " +
-//                        "C.messageid = M.mid and " +
-//                        date +
-//                        " ";
-//        try {
-//            Connection connection = JDBCConnection.createDBConnection();
-//            Statement statement = connection.createStatement();
-//            ResultSet result = statement.executeQuery(query);
-//            while(result.next()) {
-//                String mOwner = result.getString("sender").trim();
-//                String mData = result.getString("data").trim();
-//                // TODO GET OPICS WORDS TOO
-//                Message message = new Message(mOwner, mData);
-//                circleMessages.add(message);
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Error in circle: " + e.toString());
-//        }
+        String date = JDBCConnection.convertDate(queryDateParam);
+        if(messagesOlderThan) {
+            date = "M.tstamp <= " + date + " order by M.mid desc ";
+        } else {
+            date = "M.tstamp >= " + date + " order by M.mid asc ";
+        }
+        String query =
+                "select M.mid,M.sender,M.data,M.tstamp " +
+                        "from Private_Messages PM, Messages M " +
+                        "where PM.owner='" + currentUserId + "' and " +
+                            " PM.messageid=M.mid and " +
+                            " (M.sender='"+currentUserId+"' or M.sender='"+otherUserId+"') and " + date;
 
-
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while(result.next()) {
+                String mOwner = result.getString("sender").trim();
+                String mData = result.getString("data").trim();
+                Message message = new Message(mOwner, mData);
+                message.setMessageId(result.getInt("mid"));
+                message.setDatePosted(result.getTimestamp("tstamp"));
+                privateMessages.add(message);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Error in circle: " + e.toString());
+        }
         return privateMessages;
     }
 
@@ -59,5 +58,6 @@ public class PrivateConversation implements MessageQueryable {
         System.out.println("In Private Conversation Post Message");
 
         // TODO: post message for the given two users private conversation.
+        
     }
 }
