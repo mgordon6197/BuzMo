@@ -77,6 +77,9 @@ public class Constants {
                     "4:\n" +
                     "\tBack to main menu";
     public static final String BrowseUserOptions =
-            "5:\n" +
-                    "\tAdd user\n";
+            "Select from the following options:\n" +
+                    "1:\n" +
+                    "\tAdd user\n" +
+                    "2:\n" +
+                    "\tBack to main menu\n";
 }

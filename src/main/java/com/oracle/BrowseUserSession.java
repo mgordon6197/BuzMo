@@ -45,4 +45,13 @@ public class BrowseUserSession implements MessageQueryable{
     public void postMessage(Message message) {
 
     }
+
+    public ArrayList<User> queryUsers() {
+
+        ArrayList<User> Users = new ArrayList<User>();
+
+        // TODO: query Users based off either the email or topics in the instance variables. Only one of them will be initialized.
+
+        return Users;
+    }
 }
