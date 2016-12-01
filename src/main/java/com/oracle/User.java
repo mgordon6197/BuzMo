@@ -39,6 +39,20 @@ public class User implements MessageQueryable, Addable{
 
         // TODO: query all the current users friends and create a HashMap with <UserID, UserObject>
 
+        String query = "select user2id from Is_friends where user1id='"+userId+"'";
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while(result.next()) {
+                String id = result.getString("user2id").trim();
+                friends.put(id,new User(id));
+            }
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("Bad exception, query friends: " + e.toString());
+        }
+
         return friends;
     }
 
@@ -69,9 +83,9 @@ public class User implements MessageQueryable, Addable{
         // but make sure the messages match from over in messages, and the date is correct
         String date = JDBCConnection.convertDate(queryDateParam);
         if(messagesOlderThan) {
-            date = "M.tstamp < " + date + " order by M.mid desc ";
+            date = "M.tstamp <= " + date + " order by M.mid desc ";
         } else {
-            date = "M.tstamp > " + date + " order by M.mid asc ";
+            date = "M.tstamp >= " + date + " order by M.mid asc ";
         }
         String query =
                 "select M.mid,M.sender,M.data, M.tstamp " +
@@ -158,6 +172,7 @@ public class User implements MessageQueryable, Addable{
                 System.out.println("error in postMessage to circle: " + e.toString());
             }
         }
+
     }
 
     public ArrayList<Request> viewRequests() {
