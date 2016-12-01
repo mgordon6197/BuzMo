@@ -87,6 +87,7 @@ public class User implements MessageQueryable, Addable{
             while(result.next()) {
                 String mOwner = result.getString("sender").trim();
                 String mData = result.getString("data").trim();
+                // TODO GET OPICS WORDS TOO
                 Message message = new Message(mOwner, mData);
                 circleMessages.add(message);
             }
@@ -135,7 +136,7 @@ public class User implements MessageQueryable, Addable{
         postMessage(message, postToUsersCicle, isPublic);
     }
 
-
+    // list does not include me
     private void postMessage(Message message, HashMap<String, User> postToUsersCircle, boolean isPublic) {
         System.out.println("In Post to Circle");
 
