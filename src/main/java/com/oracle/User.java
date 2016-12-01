@@ -44,16 +44,15 @@ public class User implements MessageQueryable, Addable{
 
     public HashMap<String, ChatGroup> queryChatGroups() {
         HashMap<String, ChatGroup> chatGroups = new HashMap<String, ChatGroup>();
-        String query = "select M.gname,G.userid from Member_Of M,Group_Owner G " +
+        String query = "select M.gname,G.userid,G.duration from Member_Of M,Group_Owner G " +
                        "where M.userid = '" + userId + "' and G.gname = M.gname";
-        System.out.println(query);
         Statement statement = null;
         try {
             statement = JDBCConnection.createDBConnection().createStatement();
             ResultSet result = statement.executeQuery(query);
             while (result.next()) {
-                String owner = result.getString("userid");
-                String group = result.getString("gname");
+                String owner = result.getString("userid").trim();
+                String group = result.getString("gname").trim();
                 int duration = result.getInt("duration");
                 chatGroups.put(group,new ChatGroup(owner,group,duration));
             }

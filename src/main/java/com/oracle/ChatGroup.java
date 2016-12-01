@@ -41,43 +41,39 @@ public class ChatGroup implements MessageQueryable, Addable{
     }
 
     public ArrayList<Message> queryMessages(Date queryDateParam, boolean messagesOlderThan) {
-        // if messagesOlderThan == true then we want messages OLDER than queryDateParam
-        // e.g., if
         ArrayList<Message> messages = new ArrayList<Message>();
-
-        // test data
-        messages.add(new Message("messageownerid", "Hello this is a message."));
-
-        // TODO: query most recent messages in this chat in order of oldest first.
         try {
-            DateFormat dateformat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+            DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String sqlstringdate = dateformat.format(queryDateParam);
+            sqlstringdate = "TO_TIMESTAMP('" + sqlstringdate + "','" + "yyyy-mm-dd hh:mi:ss')";
             String sqlcomparedate = "";
             if(messagesOlderThan) {
-                sqlcomparedate = "M.tstamp < '" + sqlstringdate + "' order by desc ";
+                sqlcomparedate = "M.tstamp < " + sqlstringdate + " order by M.mid desc ";
             } else {
-                sqlcomparedate = "M.tstamp > '" + sqlstringdate + "' order by asc ";
+                sqlcomparedate = "M.tstamp > '" + sqlstringdate + "' order M.mid by asc ";
             }
             String query =
-                    "select " +
+                    "select M.mid,M.sender,M.data " +
                     "from Group_Messages GM, Messages M " +
                     "where GM.group_name = '" + name + "' and " +
                             "GM.messageid = M.mid and " +
-                            "date < querydate and " + sqlcomparedate +
-                            " limit 7";
+                            sqlcomparedate +
+                            " ";
+            System.out.println(query);
             Connection connection = JDBCConnection.createDBConnection();
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(query);
             while(result.next()) {
-
+                // add each message to message set
+                String mOwner = result.getString("sender").trim();
+                String mData = result.getString("data").trim();
+                Message message = new Message(mOwner,mData);
+                messages.add(message);
             }
             statement.close();
         } catch (SQLException e) {
-            System.out.println("SQL exception in queryMessages in chatgroup");
+            System.out.println("SQL exception in queryMessages in chatgroup: " + e.toString());
         }
-
-
-
         return messages;
     }
 
@@ -87,13 +83,15 @@ public class ChatGroup implements MessageQueryable, Addable{
     }
 
     public void updateDuration(String newDuration) {
-
+        // delete from messages where mid =
+        //     select messageid from group_messages g where g.group_name = 'name' and g.since < newduration
         // TODO: update chatgroup row with newDuration.
     }
 
     public void updateName(String newName) {
 
         // TODO: update chatgroup row with newName.
+
     }
 
     public void addFriendToChatGroup(User friendToAdd) {

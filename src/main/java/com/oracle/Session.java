@@ -216,6 +216,7 @@ public class Session {
         System.out.print("Enter ChatGroup ID: ");
         String chatgroupId = scanner.nextLine();
 
+        System.out.println(chatgroupId);
         ChatGroup selectedChatgroup = currentChatgroups.get(chatgroupId);
 
         if(selectedChatgroup == null) {
