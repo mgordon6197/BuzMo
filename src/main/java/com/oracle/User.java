@@ -88,7 +88,7 @@ public class User implements MessageQueryable, Addable{
             date = "M.tstamp >= " + date + " order by M.mid asc ";
         }
         String query =
-                "select M.mid,M.sender,M.data " +
+                "select M.mid,M.sender,M.data, M.tstamp " +
                         "from Circle C, Messages M " +
                         "where C.userid = '" + userId + "' and " +
                         "C.messageid = M.mid and " +
@@ -101,8 +101,10 @@ public class User implements MessageQueryable, Addable{
             while(result.next()) {
                 String mOwner = result.getString("sender").trim();
                 String mData = result.getString("data").trim();
-                // TODO GET OPICS WORDS TOO
+                Date mDate = result.getTimestamp("tstamp");
+                // TODO GET TOPICS WORDS TOO
                 Message message = new Message(mOwner, mData);
+                message.setDatePosted(mDate);
                 circleMessages.add(message);
             }
 
