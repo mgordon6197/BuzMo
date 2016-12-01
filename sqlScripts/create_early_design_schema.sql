@@ -111,3 +111,19 @@ PRIMARY KEY (group_name,messageid),
 FOREIGN KEY (group_name) REFERENCES Group_Owner(gname) ON DELETE CASCADE,
 FOREIGN KEY (messageid) REFERENCES Messages(mid) ON DELETE CASCADE
 );
+
+CREATE TABLE Friend_Requests (
+    sender CHAR(20),
+    receiver CHAR(20),
+    PRIMARY KEY (sender,receiver),
+    FOREIGN KEY (sender) REFERENCES Users(email) ON DELETE CASCADE,
+    FOREIGN KEY (receiver) REFERENCES Users(email) ON DELETE CASCADE
+);
+
+CREATE TABLE Chatgroup_Requests (
+    receiver CHAR(20),
+    group_name CHAR(20),
+    PRIMARY KEY (receiver,group_name),
+    FOREIGN KEY (receiver) REFERENCES Users(email) ON DELETE CASCADE,
+    FOREIGN KEY (group_name) REFERENCES Group_Owner(gname) ON DELETE CASCADE
+);

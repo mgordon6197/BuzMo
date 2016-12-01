@@ -1,3 +1,7 @@
+DROP TABLE Friend_Requests;
+
+DROP TABLE Chatgroup_Requests;
+
 DROP TABLE Manager;
 
 DROP TABLE Is_friends;
