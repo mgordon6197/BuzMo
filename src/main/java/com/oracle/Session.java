@@ -1,5 +1,6 @@
 package com.oracle;
 
+import java.net.CookieHandler;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -15,33 +16,48 @@ public class Session {
 
     public void start() {
         if(currentUser instanceof Manager)
-            selectManagerAction();
+            selectUserAction(true);
         else
-            selectUserAction();
+            selectUserAction(false);
     }
 
-    private void selectManagerAction(){
-        Scanner scanner = new Scanner(java.lang.System.in);
+//    private void selectManagerAction(){
+//        Scanner scanner = new Scanner(java.lang.System.in);
+//
+//        boolean logout = false;
+//        while(!logout) {
+//            System.out.println(Constants.ManagerActionMenu);
+//            String input = scanner.nextLine();
+//            if (input.equalsIgnoreCase("p"))
+//                createUserAction();
+//            else if(input.equalsIgnoreCase("v"))
+//                viewReportAction();
+//            else if (input.equalsIgnoreCase("l"))
+//                logout = true;
+//            else
+//                System.out.println("Invalid action");
+//        }
+//    }
 
-        boolean logout = false;
-        while(!logout) {
-            System.out.println(Constants.ManagerActionMenu);
-            String input = scanner.nextLine();
-            if (input.equalsIgnoreCase("c"))
-                createUserAction();
-            else if (input.equalsIgnoreCase("l"))
-                logout = true;
-            else
-                System.out.println("Invalid action");
-        }
-    }
+//    private void viewReportAction() {
+//        Manager manager = (Manager)currentUser;
+//        int numNewMessages = manager.generateNumNewMessages();
+//        int numMessageReads = manager.generateNumMessageReads();
+//        int avgNumNewMessageReads = manager.generateAvgNumNewMessageReads();
+//
+//    }
 
-    private void selectUserAction() {
+    private void selectUserAction(boolean isManager) {
         Scanner scanner = new Scanner(java.lang.System.in);
 
         boolean logout = false;
         while(!logout) {
             System.out.println(Constants.UserActionMenu);
+            if(isManager)
+                System.out.println(Constants.ManagerActionMenu);
+            else
+                System.out.println();
+
             String input = scanner.nextLine();
             if(input.equalsIgnoreCase("g"))
                 selectExistingChatgroup();
@@ -57,6 +73,8 @@ public class Session {
                 browseUsersAction();
             else if(input.equalsIgnoreCase("r"))
                 viewRequestsAction();
+            else if (input.equalsIgnoreCase("t") && isManager)
+                createUserAction();
             else if(input.equalsIgnoreCase("l"))
                 logout = true;
             else
@@ -319,6 +337,7 @@ public class Session {
         // prints out most recent messages in chatgroup
         Date queryDateParam = new Date();
         ArrayList<Message> messages = selectedChatgroup.queryMessages(queryDateParam, true);
+        Collections.reverse(messages);
         for (Message message : messages)
             System.out.println(message.toString());
 
@@ -326,9 +345,11 @@ public class Session {
         Scanner scanner = new Scanner(System.in);
         boolean done = false;
         while(!done) {
-            System.out.println(Constants.userChatGroupMessageOptions);
+            System.out.print(Constants.userChatGroupMessageOptions);
             if(currentUser.getUserId().equals(selectedChatgroup.getOwnerId()))
                 System.out.println(Constants.ownerChatGroupOptions);
+            else
+                System.out.println();
 
             try {
                 Thread.sleep(500);
@@ -399,7 +420,6 @@ public class Session {
 
         Date queryDateParam = messages.get(messages.size() - 1).getDatePosted();
         ArrayList<Message> newMessages = messageQueryable.queryMessages(queryDateParam, false);
-        Collections.reverse(newMessages);
         return newMessages;
     }
 
@@ -408,7 +428,9 @@ public class Session {
             return messages;
 
         Date queryDateParam = messages.get(0).getDatePosted();
-        return messageQueryable.queryMessages(queryDateParam, true);
+        ArrayList<Message> newMessages = messageQueryable.queryMessages(queryDateParam, true);
+        Collections.reverse(newMessages);
+        return newMessages;
     }
 
     private Message createNewMessage() {
