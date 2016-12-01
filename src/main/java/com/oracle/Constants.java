@@ -5,11 +5,8 @@ package com.oracle;
  */
 public class Constants {
     public static final  String ManagerActionMenu =
-            "Select from the following actions:\n" +
-                    "c:\n" +
-                    "\tCreate User\n" +
-                    "l:\n" +
-                    "\tLogout";
+                    "t:\n" +
+                    "\tCreate User\n";
 
     public static final String UserActionMenu =
             "Select from the following actions:\n" +

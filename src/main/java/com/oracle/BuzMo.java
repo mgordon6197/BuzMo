@@ -88,7 +88,7 @@ public class BuzMo
         else if (userType.equalsIgnoreCase("m") && isUser && isManager)
             return new Manager(username);
         else {
-            System.out.println("Incorrect user type\n");
+            System.out.println("Invalid Login\n");
             return null;
         }
     }

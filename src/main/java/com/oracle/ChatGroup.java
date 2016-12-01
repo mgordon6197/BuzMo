@@ -1,9 +1,6 @@
 package com.oracle;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.DateFormat;
@@ -53,7 +50,7 @@ public class ChatGroup implements MessageQueryable, Addable{
                 sqlcomparedate = "M.tstamp >= " + sqlstringdate + " order by M.mid asc ";
             }
             String query =
-                    "select M.mid,M.sender,M.data " +
+                    "select M.mid,M.sender,M.data,M.tstamp " +
                     "from Group_Messages GM, Messages M " +
                     "where GM.group_name = '" + name + "' and " +
                             "GM.messageid = M.mid and " +
@@ -66,7 +63,9 @@ public class ChatGroup implements MessageQueryable, Addable{
                 // add each message to message set
                 String mOwner = result.getString("sender").trim();
                 String mData = result.getString("data").trim();
+                Timestamp mDate = result.getTimestamp("tstamp");
                 Message message = new Message(mOwner,mData);
+                message.setDatePosted(mDate);
                 messages.add(message);
             }
             statement.close();
