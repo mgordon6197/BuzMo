@@ -143,6 +143,7 @@ public class Session {
             System.out.println(Constants.BrowseUserOptions);
 
             String option = scanner.nextLine();
+
             if (option.equals("1"))
                 addFriend();
             else if (option.equals("2"))
