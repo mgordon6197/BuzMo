@@ -58,7 +58,7 @@ public class BuzMo
         boolean isUser = false;
         boolean isManager = false;
         try {
-            String query = "select email from Users where email='" + username + "'";
+            String query = "select email,password from Users where email='" + username + "' and password='" + password + "'";
             Connection con = JDBCConnection.createDBConnection();
             Statement statement = con.createStatement();
             ResultSet result = statement.executeQuery(query);
