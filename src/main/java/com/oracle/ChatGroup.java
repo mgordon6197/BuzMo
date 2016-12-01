@@ -50,7 +50,7 @@ public class ChatGroup implements MessageQueryable, Addable{
             if(messagesOlderThan) {
                 sqlcomparedate = "M.tstamp < " + sqlstringdate + " order by M.mid desc ";
             } else {
-                sqlcomparedate = "M.tstamp > '" + sqlstringdate + "' order M.mid by asc ";
+                sqlcomparedate = "M.tstamp > " + sqlstringdate + " order by M.mid asc ";
             }
             String query =
                     "select M.mid,M.sender,M.data " +
@@ -141,7 +141,6 @@ public class ChatGroup implements MessageQueryable, Addable{
     public void addFriendToChatGroup(User friendToAdd) {
 
         Request newChatGroupRequest = new Request(friendToAdd, this, RequestType.CHATGROUP_INVITE);
-
         newChatGroupRequest.createRequest();
     }
 
