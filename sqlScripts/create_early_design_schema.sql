@@ -20,12 +20,28 @@ PRIMARY KEY(topic)
 );
 
 CREATE TABLE Messages (
-mid NUMBER GENERATED ALWAYS AS IDENTITY,
+mid int,
 data CHAR(1400),
 tstamp timestamp,
 sender CHAR(20),
+PRIMARY KEY (mid),
 FOREIGN KEY (sender) REFERENCES Users(email)
 );
+
+
+
+CREATE SEQUENCE message_seq START WITH 1;
+
+CREATE OR REPLACE TRIGGER message_bir
+BEFORE INSERT ON Messages
+FOR EACH ROW
+BEGIN
+  SELECT message_seq.NEXTVAL
+  INTO   :new.mid
+  FROM   dual;
+END;
+/
+
 
 CREATE TABLE Is_friends (
 user1id CHAR(20),
