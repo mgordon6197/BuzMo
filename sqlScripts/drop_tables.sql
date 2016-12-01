@@ -21,3 +21,5 @@ DROP TABLE Group_Owner;
 DROP TABLE Messages;
 
 DROP TABLE Users;
+
+DROP SEQUENCE message_seq;
