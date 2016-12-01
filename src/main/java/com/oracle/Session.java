@@ -286,7 +286,8 @@ public class Session {
             else if(option.equals("6") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {
                 System.out.print("Enter new ChatGroup message duration(seconds): ");
                 String newDuration = scanner.nextLine();
-                selectedChatgroup.updateDuration(newDuration);
+                int duration = Integer.parseInt(newDuration);
+                selectedChatgroup.updateDuration(duration);
             }
             // update chatgroup name
             else if(option.equals("7") && currentUser.getUserId().equals(selectedChatgroup.getOwnerId())) {

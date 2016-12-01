@@ -100,10 +100,22 @@ public class ChatGroup implements MessageQueryable, Addable{
         }
     }
 
-    public void updateDuration(String newDuration) {
+    public void updateDuration(int newDuration) {
         // delete from messages where mid =
         //     select messageid from group_messages g where g.group_name = 'name' and g.since < newduration
         // TODO: update chatgroup row with newDuration.
+
+        String query = "update Group_Owner" +
+                " set duration = " + newDuration + " " +
+                " where gname = '" + name + "'";
+        try {
+            Connection connection = JDBCConnection.createDBConnection();
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("SQL Exception in updateDuration: " + e.toString());
+        }
     }
 
     public void updateName(String newName) {
