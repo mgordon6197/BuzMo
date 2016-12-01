@@ -138,9 +138,7 @@ insert into Is_friends values ('JeffBezos@yahoo.com','Timcook@gmail.com');
 insert into Is_friends values ('JeffBezos@yahoo.com','Elonmusk@yahoo.com');
 insert into Is_friends values ('JeffBezos@yahoo.com','LarryPage@gmail.com');
 
-insert into Messages values (0,'I am going to warriors.',TO_TIMESTAMP('2016-07-05 09:00:00','YYYY-MM-DD HH24:MI:SS'),'DurantKev@gmail.com');
-insert into Private_Messages values (0,'DurantKev@gmail.com');
-insert into Private_Messages values (0,'RWestbrook@gmail.com');
+
 
 insert into Messages values (1,'We are gonna building ships and sail to Westeros.',TO_TIMESTAMP('2016-07-08 22:00:00','YYYY-MM-DD HH24:MI:SS'),'PDinklage@gmail.com');
 insert into Private_Messages values (1,'PDinklage@gmail.com');
