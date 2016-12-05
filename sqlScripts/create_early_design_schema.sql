@@ -13,7 +13,6 @@ PRIMARY KEY (userid),
 FOREIGN KEY (userid) REFERENCES Users(email)
 );
 
-
 CREATE TABLE Topic (
 topic CHAR(20),
 PRIMARY KEY(topic)

@@ -14,7 +14,15 @@ public class Manager extends User {
     }
 
     public void addUser(String username, String password) {
-
-        // TODO: add user to database
+        String query = "insert into Users values " +
+                "('"+username+"','"+username+"','"+password+"',"+ "'400'" + ",'boo')";
+        try {
+            Connection con = JDBCConnection.createDBConnection();
+            Statement statement = con.createStatement();
+            statement.executeQuery(query);
+            statement.close();
+        } catch (SQLException e) {
+            System.out.println("BAD USER");
+        }
     }
 }

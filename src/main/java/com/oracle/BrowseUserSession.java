@@ -39,7 +39,9 @@ public class BrowseUserSession {
     }
 
     public ArrayList<User> queryUsers() {
-
+        for(Topic t : topics) {
+            System.out.println("T: " + t.getTopic());
+        }
         // TODO: query Users based off either the email or topics in the instance variables. Only one of them will be initialized.
         ArrayList<User> u = new ArrayList<User>();
 
@@ -77,18 +79,21 @@ public class BrowseUserSession {
                         " from Topic_Message T, Messages M" +
                         " where T.messageid=M.mid and M.sender='"+userid+"'";
                 result = statement.executeQuery(query);
-                ArrayList<Topic> userTopics = new ArrayList<Topic>();
+                ArrayList<String> userTopics = new ArrayList<String>();
                 while(result.next()) {
-                    userTopics.add(new Topic(result.getString("topic").trim()));
+                    String str = result.getString("topic").trim();
+                    userTopics.add(str);
                 }
 
                 boolean addUser = false;
+
                 for(Topic str : topics) {
                     if(userTopics.contains(str.getTopic())) {
                         addUser = true;
                         break;
                     }
                 }
+
                 if(addUser) {
                     u.add(new User(userid));
                 }
